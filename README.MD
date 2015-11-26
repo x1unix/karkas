@@ -1,2 +1,2 @@
-### KarkasJS
-## A simple template engine for web apps
+## KarkasJS
+### A simple template engine for web apps
