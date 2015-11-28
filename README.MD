@@ -92,7 +92,7 @@ karkas.include("template.html").then(function(){
 }).catch(function (err) {
     console.error('Augh, there was an error!', err.statusText);
 });
-
+```
 **template.html**
 ```
 &lt;template name="listTemplate"&gt;
