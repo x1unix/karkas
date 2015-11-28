@@ -1,4 +1,5 @@
 # KarkasJS
+
 **Version: 2.0**
 A simple template engine for web apps
 
@@ -13,9 +14,11 @@ Original non-compiled **karkas.js** file has embedded JSDoc markup, that allows 
 
 Tutorial also included in **html** files in this repository.
 
+
 #### 1. HTML and JS
 
 Create an HTML file, and include there **karkas.js** file.
+
 
 #### 2. Create an template
 
@@ -91,14 +94,14 @@ karkas.include("template.html").then(function(){
 });
 
 **template.html**
-```
-<template name="listTemplate">
+``
+&lt;template name="listTemplate"&gt;
 {{data}}
-</template>
+&lt;/template&gt;
 
 <!--this file can contain a multiple templates-->
-<template name="menuTemplate">
+&lt;template name="menuTemplate"&gt;
 {{data}}
-</template>
-```
+&lt;/template&gt;
 
+```
