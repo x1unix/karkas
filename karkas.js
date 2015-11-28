@@ -1,7 +1,7 @@
 /**
   * KarkasJS
   * @author Denis Sedchenko
-  * @version 1.0.1
+  * @version 2.0
   */
 var karkas = {
     /*
@@ -9,9 +9,10 @@ var karkas = {
      */
     views : [],
 
-    /*
-     * Find all templates on page or refresh page container
-     */ 
+    version: "2.0",
+    /**
+     * Load all templates on the page into karkas
+     */
     findAll: function() {
         this.views = [];
         var w = document.querySelectorAll("template");
@@ -21,16 +22,104 @@ var karkas = {
         }
     },
 
+    /**
+     * Compile a data using a specified template. Also can directly process output to HTML elements
+     * @param templateName The name of selected template
+     * @param content Object or array to proceed
+     * @param target [optional] String, array or single HTML element
+     * @param overwrite [optional] overwrite a content in HTML element
+     * @returns string Compiled data
+     */
+    compile: function(templateName, content, target, overwrite) {
+
+    	// Output buffer
+    	var output 	 = "",
+    		template = this.getView(templateName);
+
+    	// If target is undefined, make it 'false'
+    	target = target || false;
+
+    	// if overwrite is undefined, it will be false
+    	overwrite = overwrite || false;
+
+    	// If we have an array, parse as array
+    	if(content instanceof Array) {
+    		output = template.parseArray(content);
+    	} else {
+    		output = template.parse(content);
+    	}
+
+    	// if target is false, return value
+    	if(target == false) return output;
+
+    	function karkas__pasteData(htmlElement){
+    		if(overwrite) {
+    			htmlElement.innerHTML = output;
+    		}else{
+    			htmlElement.innerHTML += output;
+    		}
+    		return output;
+    	}
+
+    	// if we have a single HTML object, work with it and break
+    	if(target instanceof HTMLElement) return karkas__pasteData(target);
+
+    	if(typeof target == "string") target = document.querySelectorAll(target);
+
+    	for(var i = 0; i < target.length; i++){
+    		karkas__pasteData(target[i]);
+    	}
+
+    	return output;
+    },
+
+    /**
+     * Load templates from remote URL
+     * @param url URL
+     * @return promise
+     */
+    include: function(url) {
+        if(document.querySelectorAll("karkas").length == 0){
+            document.getElementsByTagName("body")[0].appendChild(document.createElement("karkas"));
+        }
+        return new Promise(function (resolve, reject) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.onload = function () {
+                if (this.status >= 200 && this.status < 300) {
+                    document.querySelector("karkas").innerHTML += xhr.response;
+                    karkas.findAll();
+                    resolve(xhr.response);
+                } else {
+                    reject({
+                        status: this.status,
+                        statusText: xhr.statusText
+                    });
+                }
+            };
+            xhr.onerror = function () {
+                reject({
+                    status: this.status,
+                    statusText: xhr.statusText
+                });
+            };
+            xhr.send();
+        });
+    },
     /*
      * Get template by name
      */
     getView: function(vId) {
+    	if(typeof karkas.views[vId] == "undefined") throw new ReferenceError("[KarkasView] Requested template is not defined: '"+vId+"'");
         return karkas.views[vId];
     }
 
 };
 
-// Single karkas template class
+/**
+ * Karkas view class
+ * @param viewElement name of view
+ */
 var karkasView = function(viewElement) {
     this.name = viewElement.getAttribute("name") || "";
     this.selector = "template[name='"+this.name+"']";
@@ -39,14 +128,17 @@ var karkasView = function(viewElement) {
 karkasView.prototype = {
     pattern:/[{{](\S*)[}}]+/gim,
 
-    /*
-     * Return's an template text
+    /**
+     * Returns an HTML text of template
+     * @returns {string|*|string|string|string|string}
      */
     getContext : function() {
         return this.element.innerHTML;
     },
-    /*
-     * Parse a template with data
+    /**
+     * Parse an single object using the template
+     * @param fields Object
+     * @returns {*} Compiled content
      */
     parse: function(fields) {
      var sReturn    = this.getContext(),
@@ -63,7 +155,11 @@ karkasView.prototype = {
         return sReturn;
     },
 
-    // Parse array of objects
+    /**
+     * Parse an array of objects using the template
+     * @param arr
+     * @returns {string} Compiled content
+     */
     parseArray: function(arr) {
         var c = "";
         for(var i in arr) {
@@ -75,9 +171,10 @@ karkasView.prototype = {
 
 (function(){
 
-     // Karkas init
+    // Register custom karkas elements and styles
     document.createElement("template");
-    var css = '.template{display: none;}',
+    document.createElement("karkas");
+    var css = 'template,karkas{display: none;}',
         head = document.head || document.getElementsByTagName('head')[0],
         style = document.createElement('style');
     style.type = 'text/css';
