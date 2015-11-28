@@ -95,13 +95,13 @@ karkas.include("template.html").then(function(){
 ```
 **template.html**
 ```
-&lt;template name="listTemplate"&gt;
+<template name="listTemplate">
 {{data}}
-&lt;/template&gt;
+</template>
 
 <!--this file can contain a multiple templates-->
-&lt;template name="menuTemplate"&gt;
+<template name="menuTemplate">
 {{data}}
-&lt;/template&gt;
+</template>
 
 ```
