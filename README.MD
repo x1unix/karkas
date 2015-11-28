@@ -94,7 +94,7 @@ karkas.include("template.html").then(function(){
 });
 
 **template.html**
-``
+```
 &lt;template name="listTemplate"&gt;
 {{data}}
 &lt;/template&gt;
