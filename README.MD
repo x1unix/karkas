@@ -6,8 +6,13 @@ A simple template engine for web apps
 
 
 ## Requirements
-* Chrome, Firefox, Safari or Internet Explorer 8 or above
+* Chrome, Firefox, Safari or Internet Explorer 8 or higher.
 * Web-server (optional, for including templates)
+
+## Compatibility
+This library was writen using native JavaScript and does not requires any additional library to work.
+You can use it with **jQuery**, but if it **not compatible** with **jQuery selector object**. That means, that you need to convert jQuery selector object back to **HTMLElement** to use it in KarkasJS.
+Also this library **is not compatible** with **AngularJS**.
 
 ## JSDoc
 Original non-compiled **karkas.js** file has embedded JSDoc markup, that allows to read documentation in your IDE.
