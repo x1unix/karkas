@@ -34,20 +34,8 @@
         <br /><br />
     </div>
 
-    <!-- 1. define a template inside html -->
-    <template name="listTemplate">
-    	<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-    		<div class="thumbnail">
-    			<img src="{{img}}" class="img-responsive img-rounded" />
-    			<div class="caption">
-    				<h3>{{title}}</h3>
-    				<p>{{text}}</p>
-    			</div>
-    		</div>
-    	</div>	
-    </template>
 
-    <!-- 2. Connect a KarkasJS -->
+    <!-- 1. Connect a KarkasJS -->
     <script type="text/javascript" src="karkas.js"></script>
 
 
@@ -76,10 +64,12 @@
         }
     ];
 
-    // 4. Overwrite container using compiled HTML with data using out template
-    //  Args:
-    // templateName, data (Array or Object), html element / string [optional], overwrite content [optional]
-    karkas.compile("listTemplate",data,"#container",true);
+    // 4. Get templates from url and parse posts using them
+     karkas.include("template.html").then(function(){
+        karkas.compile("listTemplate",data,"#container",true);
+    }).catch(function (err) {
+        console.error('Augh, there was an error!', err.statusText);
+    });
 
 
     // 5. Load more items and draw it
