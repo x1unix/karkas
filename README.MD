@@ -1,16 +1,18 @@
 # KarkasJS
 
 **Version: 2.0**
+
 A simple template engine for web apps
 
-### Requirements
+
+## Requirements
 * Chrome, Firefox, Safari or Internet Explorer 8 or above
 * Web-server (optional, for including templates)
 
-### JSDoc
+## JSDoc
 Original non-compiled **karkas.js** file has embedded JSDoc markup, that allows to read documentation in your IDE.
 
-### Tutorial
+## Tutorial
 
 Tutorial also included in **html** files in this repository.
 
@@ -79,7 +81,7 @@ Just parse a single object and return data to variable:
 var compiledHTML = karkas.compile("myTemplate",singleObject);
 ```
 
-### Including remote templates
+## Including remote templates
 Karkas allows to you to save your templates in files, and include them on demand using AJAX.
 Example of including templates is available in **ajax-template-example.html** file and require an HTTP server.
 
