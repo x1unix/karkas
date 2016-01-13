@@ -1,6 +1,6 @@
 # KarkasJS
 
-**Version: 2.0.1**
+**Version: 2.0.3**
 
 A simple template engine for web apps
 
@@ -85,6 +85,16 @@ Just parse a single object and return data to variable:
 ```
 var compiledHTML = karkas.compile("myTemplate",singleObject);
 ```
+
+#### Unpacking simple arrays
+To unpack a simple array of strings or numbers, you can use `this` variable in templates:
+
+```
+<template name="1">
+	<a href="{{this}}">{{this}}</a>
+</template>
+```
+
 
 ## Including remote templates
 Karkas allows to you to save your templates in files, and include them on demand using AJAX.
