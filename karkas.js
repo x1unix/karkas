@@ -1,7 +1,7 @@
 /**
- * KarkasJS
+ * KarkasJS (https://github.com/odin3/karkasJS)
  * @author Denis Sedchenko
- * @version 2.0.1
+ * @version 2.0.3
  */
 var karkas = {
     /*
@@ -9,7 +9,7 @@ var karkas = {
      */
     views : [],
 
-    version: "2.0.1",
+    version: "2.0.3",
     /**
      * Load all templates on the page into karkas
      */
@@ -144,10 +144,16 @@ karkasView.prototype = {
             tpFields   = sReturn.match(this.pattern);
 
         for(var pat in tpFields){
-            if(typeof tpFields[pat] == "string"){
+            if(typeof tpFields[pat] == "string" || typeof tpFields[pat] == "number"){
                 var key = tpFields[pat].replace("{{","").replace("}}","");
                 var newVal =  "";
-                if(typeof fields[key] != "undefined") newVal = fields[key].toString();
+
+                if(key == "this" && typeof fields != "object") {
+                    newVal = fields;
+                } else {
+                    if(typeof fields[key] != "undefined") newVal = fields[key.toString()].toString();
+                }
+
                 sReturn = sReturn.replace(tpFields[pat],newVal);
             }
         }
@@ -184,6 +190,3 @@ karkasView.prototype = {
 
     //karkas.findAll();
 })();
-
-
-
