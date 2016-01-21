@@ -1,9 +1,11 @@
 # KarkasJS
 
-**Version: 2.0.3**
+**Version: 2.1**
 
 A simple template engine for web apps
 
+## About
+KarkasJS allows to you to make simple output of received JSON objects or arrays directly as HTML assets to your web application.
 
 ## Requirements
 * Chrome, Firefox, Safari or Internet Explorer 8 or higher.
@@ -11,8 +13,7 @@ A simple template engine for web apps
 
 ## Compatibility
 This library was writen using native JavaScript and does not requires any additional library to work.
-You can use it with **jQuery**, but if it **not compatible** with **jQuery selector object**. That means, that you need to convert jQuery selector object back to **HTMLElement** to use it in KarkasJS.
-Also this library **is not compatible** with **AngularJS**.
+KarkasJS is compatible with **jQuery** and may be compatible with **AngularJS** if you're using remote templates.
 
 ## JSDoc
 Original non-compiled **karkas.js** file has embedded JSDoc markup, that allows to read documentation in your IDE.
@@ -33,8 +34,8 @@ To define a new template, create a new **template** tag. This block can be place
 Also you have to give a name for template with **name** attribute, for example:
 
 ```
-<template name="myFirstTemplate">
-</template>
+<script type="template/karkas" name="myFirstTemplate">
+</script>
 ```
 
 #### 3. Add content and variables
@@ -61,9 +62,9 @@ For example, this array:
 Can be parsed with this template:
 
 ```
-<template name="myTemplate">
+<script type="template/karkas" name="myTemplate">
 	<a href="site.com/user{{id}}">{{name}} {{lastname}} ({{id}})</a>
-</template>
+</script>
 ```
 
 #### 4. Parsing data
@@ -90,9 +91,9 @@ var compiledHTML = karkas.compile("myTemplate",singleObject);
 To unpack a simple array of strings or numbers, you can use `this` variable in templates:
 
 ```
-<template name="1">
+<script type="template/karkas" name="1">
 	<a href="{{this}}">{{this}}</a>
-</template>
+</script>
 ```
 
 
@@ -112,13 +113,13 @@ karkas.include("template.html").then(function(){
 ```
 **template.html**
 ```
-<template name="listTemplate">
+<script type="template/karkas" name="listTemplate">
 {{data}}
-</template>
+</script>
 
 <!--this file can contain a multiple templates-->
-<template name="menuTemplate">
+<script type="template/karkas" name="menuTemplate">
 {{data}}
-</template>
+</script>
 
 ```
