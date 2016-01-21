@@ -1,7 +1,7 @@
 /**
  * KarkasJS (https://github.com/odin3/karkasJS)
  * @author Denis Sedchenko
- * @version 2.0.3
+ * @version 2.0.5
  */
 var karkas = {
     /*
@@ -9,13 +9,14 @@ var karkas = {
      */
     views : [],
 
-    version: "2.0.3",
+    version: "2.0.5",
     /**
      * Load all templates on the page into karkas
      */
     findAll: function() {
         this.views = [];
-        var w = document.querySelectorAll("template");
+        if(document.querySelectorAll("template").length > 0) console.warn("KarkasJS: HTML element `template` is deprecated, use `script[type='template/karkas']` instead.");
+        var w = document.querySelectorAll("template, script[type='template/karkas']");
         for(var c = 0;  c < w.length; c++ )
         {
             this.views[w[c].getAttribute("name")] = new karkasView(w[c]);
@@ -33,7 +34,7 @@ var karkas = {
     compile: function(templateName, content, target, overwrite) {
 
         // Output buffer
-        var output 	 = "",
+        var output   = "",
             template = this.getView(templateName);
 
         // If target is undefined, make it 'false'
