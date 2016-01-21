@@ -1,7 +1,7 @@
 /**
  * KarkasJS (https://github.com/odin3/karkasJS)
  * @author Denis Sedchenko
- * @version 2.0.5
+ * @version 2.1
  */
 var karkas = {
     /*
@@ -9,7 +9,7 @@ var karkas = {
      */
     views : [],
 
-    version: "2.0.5",
+    version: "2.1",
     /**
      * Load all templates on the page into karkas
      */
@@ -52,6 +52,14 @@ var karkas = {
 
         // if target is false, return value
         if(target == false) return output;
+
+        // jQuery support
+        if((typeof jQuery !== "undefined") && target instanceof jQuery && target.length > 0) {
+            target = target.get(0);
+        } else {
+            return output;
+        }
+
 
         function karkas__pasteData(htmlElement){
             if(overwrite) {
@@ -188,6 +196,5 @@ karkasView.prototype = {
 
     head.appendChild(style);
 
-
-    //karkas.findAll();
+    karkas.findAll();
 })();
