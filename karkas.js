@@ -15,7 +15,6 @@ var karkas = {
      */
     findAll: function() {
         this.views = [];
-        if(document.querySelectorAll("template").length > 0) console.warn("KarkasJS: HTML element `template` is deprecated, use `script[type='template/karkas']` instead.");
         var w = document.querySelectorAll("template, script[type='template/karkas']");
         for(var c = 0;  c < w.length; c++ )
         {
@@ -55,12 +54,13 @@ var karkas = {
 
         // == jQuery Support ==
         // Check if we have jQuery installed, and jQuery object is not empty
-        if((typeof jQuery !== "undefined") && target instanceof jQuery))) {
+        if((typeof jQuery !== "undefined") && target instanceof jQuery) {
             if(target.length > 0) {
                 target = target.get(0);
             } else {
                 return output;
             }
+
         }
 
 
