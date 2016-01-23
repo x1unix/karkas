@@ -55,10 +55,12 @@ var karkas = {
 
         // == jQuery Support ==
         // Check if we have jQuery installed, and jQuery object is not empty
-        if((typeof jQuery !== "undefined") && target instanceof jQuery && target.length > 0) {
-            target = target.get(0);
-        } else {
-            return output;
+        if((typeof jQuery !== "undefined") && target instanceof jQuery))) {
+            if(target.length > 0) {
+                target = target.get(0);
+            } else {
+                return output;
+            }
         }
 
 
