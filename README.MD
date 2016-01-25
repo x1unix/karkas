@@ -1,6 +1,6 @@
 # KarkasJS
 
-**Version: 2.1**
+**Version: 2.1.5**
 
 A simple template engine for web apps
 
@@ -48,12 +48,22 @@ For example, this array:
 	{
 		id: 0,
 		name: "Andrew",
-		lastname: "Johnson"
+		lastname: "Johnson",
+		date: {
+			day:2,
+			month:"July",
+			year:2010
+		}
 	},
 	{
 		id: 1,
 		name: "Lorem",
-		lastname: "Lipsum"
+		lastname: "Lipsum",
+		date: {
+			day:1,
+			month:"January",
+			year:2014
+		}
 	}
 ] 
 
@@ -64,6 +74,7 @@ Can be parsed with this template:
 ```
 <script type="template/karkas" name="myTemplate">
 	<a href="site.com/user{{id}}">{{name}} {{lastname}} ({{id}})</a>
+	<p>{{date.day}} {{date.month}} {{date.year}}</p>
 </script>
 ```
 
