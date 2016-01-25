@@ -42,6 +42,7 @@
     			<div class="caption">
     				<h3>{{title}}</h3>
     				<p>{{text}}</p>
+                    <i>{{author.name}} / {{author.lastName}}</i>
     			</div>
     		</div>
     	</div>	
@@ -56,21 +57,36 @@
     var data = [
     	{
     		img: "http://lorempixel.com/400/200/",
+            author: {
+                name:"Lorem",
+                lastName: "Ipsum"
+            },
     		title: "Her yet there truth merit",
     		text: "An sincerity so extremity he additions. Her yet there truth merit. Mrs all projecting favourable now unpleasing. Son law garden chatty temper. Oh children provided to mr elegance marriage strongly."
     	},
     	{
     		img: "http://lorempixel.com/400/200/abstract/",
+            author: {
+                name:"Dmitriy",
+                lastName: "Sokolov"
+            },
     		title: "Messenger bag migas ",
     		text: "Messenger bag migas VHS YOLO, swag ramps cred wayfarers typewriter kinfolk freegan. Street art poutine 90's kogi gluten-free portland, kitsch wolf microdosing try-hard gentrify green juice."
     	},
     	{
     		img: "http://lorempixel.com/400/200/cats/",
-    		title: "Donec eget sapien est",
+            author: {
+                name:"John",
+                lastName: "Miller"
+            },    		title: "Donec eget sapien est",
     		text: "Kogi gluten-free portland, kitsch wolf microdosing try-hard green juice. Offal vinyl franzen synth. Quinoa polaroid pork belly, ramps brooklyn narwhal you probably haven't heard of them."
     	},
         {
             img: "http://lorempixel.com/400/200/people/",
+            author: {
+                name:"Scott",
+                lastName: "Piligrimm"
+            },
             title: "Pellentesque maximus",
             text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam facilisis nec elit ut lobortis. Morbi dictum ipsum sed odio scelerisque, vulputate finibus arcu consectetur. Maecenas rhoncus neque"
         }
