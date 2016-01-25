@@ -1,7 +1,9 @@
 /**
  * KarkasJS (https://github.com/odin3/karkasJS)
+ * Licensed by MIT license
+ *
  * @author Denis Sedchenko
- * @version 2.1
+ * @version 2.1.5
  */
 var karkas = {
     /*
@@ -9,13 +11,43 @@ var karkas = {
      */
     views : [],
 
-    version: "2.1",
+    version: "2.1.5",
+
+    /**
+     * Start finding templates at DOM content loaded
+     */
+    autorun: true,
+
+    /**
+     * Settings
+     */
+    params: {
+        /**
+         *  Parse expressions as array keys or object fields
+         */
+        parseAsObject: true,
+
+        /**
+         * Enable or disable legacy mode
+         */
+        allowTemplatesTag: false,
+    },
+    
+
     /**
      * Load all templates on the page into karkas
      */
     findAll: function() {
+        // Views container
         this.views = [];
-        var w = document.querySelectorAll("template, script[type='template/karkas']");
+
+        // Check if legacy `template` tag is enabled
+        // And select elements according to it
+        var querySelect = "script[type='template/karkas']";
+        if(this.params.allowTemplatesTag) querySelect += " ,template";
+        var w = document.querySelectorAll(querySelect);
+
+        // Grep all elements
         for(var c = 0;  c < w.length; c++ )
         {
             this.views[w[c].getAttribute("name")] = new karkasView(w[c]);
@@ -121,7 +153,7 @@ var karkas = {
      * Get template by name
      */
     getView: function(vId) {
-        if(typeof karkas.views[vId] == "undefined") throw new ReferenceError("[KarkasView] Requested template is not defined: '"+vId+"'");
+        if(typeof karkas.views[vId] == "undefined") throw new ReferenceError("KarkasJS: Requested template is not defined: '"+vId+"'");
         return karkas.views[vId];
     }
 
@@ -132,9 +164,14 @@ var karkas = {
  * @param viewElement name of view
  */
 var karkasView = function(viewElement) {
-    this.name = viewElement.getAttribute("name") || "";
-    this.selector = "template[name='"+this.name+"']";
-    this.element = viewElement;
+    if(viewElement.getAttribute("name") == null || viewElement.getAttribute("name").length == 0) {
+        throw new ReferenceError("KarkasJS: Template element must have a name");
+    } else {
+        this.name = viewElement.getAttribute("name") || "";
+        this.element = viewElement;
+        this.selector = this.element.tagName.toLowerCase()+"[name='"+this.name+"']";
+    }
+    
 };
 karkasView.prototype = {
     pattern:/[{{](\S*)[}}]+/gim,
@@ -157,13 +194,19 @@ karkasView.prototype = {
 
         for(var pat in tpFields){
             if(typeof tpFields[pat] == "string" || typeof tpFields[pat] == "number"){
+
+                // Remove brackets
                 var key = tpFields[pat].replace("{{","").replace("}}","");
+
                 var newVal =  "";
 
                 if(key == "this" && typeof fields != "object") {
                     newVal = fields;
                 } else {
-                    if(typeof fields[key] != "undefined") newVal = fields[key.toString()].toString();
+                    // Parse expression as array keys or object fields
+                    newVal = eval(
+                        (karkas.params.parseAsObject) ? "fields."+key : "fields[\""+key.split(".").join("\"][\"")+"\"]"
+                        );
                 }
 
                 sReturn = sReturn.replace(tpFields[pat],newVal);
@@ -191,7 +234,7 @@ karkasView.prototype = {
     // Register custom karkas elements and styles
     document.createElement("template");
     document.createElement("karkas");
-    var css = 'template,karkas{display: none;}',
+    var css = (karkas.params.allowTemplatesTag == true) ? 'template,karkas{display: none;}' : "karkas{display: none;}",
         head = document.head || document.getElementsByTagName('head')[0],
         style = document.createElement('style');
     style.type = 'text/css';
@@ -199,5 +242,5 @@ karkasView.prototype = {
 
     head.appendChild(style);
 
-    karkas.findAll();
+    if(karkas.autorun) karkas.findAll();
 })();
