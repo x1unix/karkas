@@ -2,3 +2,4 @@ example/* linguist-documentation
 *.js linguist-vendored
 *.md linguist-documentation
 *.MD linguist-documentation
+*.* linguist-language=JavaScript
