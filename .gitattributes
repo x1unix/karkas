@@ -1,0 +1,4 @@
+example/* linguist-vendored=false
+*.js linguist-vendored
+*.md linguist-vendored=false
+*.MD linguist-vendored=false
