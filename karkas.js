@@ -25,7 +25,7 @@ var karkas = {
         /**
          *  Parse expressions as array keys or object fields
          */
-        parseAsObject: true,
+        parseAsObject: false,
 
         /**
          * Enable or disable legacy mode
