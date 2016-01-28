@@ -3,7 +3,7 @@
  * Licensed by MIT license
  *
  * @author Denis Sedchenko
- * @version 2.1.5
+ * @version 2.1.6
  */
 var karkas = {
     /*
@@ -11,7 +11,7 @@ var karkas = {
      */
     views : [],
 
-    version: "2.1.5",
+    version: "2.1.6",
 
     /**
      * Start finding templates at DOM content loaded
