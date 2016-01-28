@@ -1,6 +1,6 @@
-# KarkasJS
+# Karkas
 
-**Version: 2.1.5**
+**Version: 2.1.6**
 
 A simple template engine for web apps
 
@@ -10,6 +10,9 @@ KarkasJS allows to you to make simple output of received JSON objects or arrays 
 ## Requirements
 * Chrome, Firefox, Safari or Internet Explorer 8 or higher.
 * Web-server (optional, for including templates)
+
+## Installation
+You can install Karkas with **Bower** package manager - `bower install karkas` or just download the source code from this repo.
 
 ## Compatibility
 This library was writen using native JavaScript and does not requires any additional library to work.
