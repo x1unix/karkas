@@ -1,0 +1,28 @@
+{
+  "name": "karkas",
+  "main": "karkas.js",
+  "authors": [
+    "Denis Sedchenko <denis0051@gmail.com>"
+  ],
+  "description": "JSON to HTML templating kit",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "json",
+    "html",
+    "template",
+    "moustache",
+    "layout",
+    "assets"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/odin3/karkas",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
