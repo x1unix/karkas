@@ -1,6 +1,6 @@
 # Karkas
 
-**Version: 2.1.6**
+**Version: 2.1.7**
 
 A simple template engine for web apps
 
