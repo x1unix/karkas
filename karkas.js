@@ -3,7 +3,7 @@
  * Licensed by MIT license
  *
  * @author Denis Sedchenko
- * @version 2.1.6
+ * @version 2.1.7
  */
 var karkas = {
     /*
@@ -11,7 +11,7 @@ var karkas = {
      */
     views : [],
 
-    version: "2.1.6",
+    version: "2.1.7",
 
     /**
      * Start finding templates at DOM content loaded
@@ -31,6 +31,10 @@ var karkas = {
          * Enable or disable legacy mode
          */
         allowTemplatesTag: false,
+        /**
+         * Will replace undefined properties with empty string
+         */
+        replaceUndefinedExpressions: true,
     },
     
 
@@ -207,6 +211,7 @@ karkasView.prototype = {
                     newVal = eval(
                         (karkas.params.parseAsObject) ? "fields."+key : "fields[\""+key.split(".").join("\"][\"")+"\"]"
                         );
+                    if((typeof newVal == "undefined") && (replaceUndefinedExpressions == true)) newVal = "";    
                 }
 
                 sReturn = sReturn.replace(tpFields[pat],newVal);
