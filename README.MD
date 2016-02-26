@@ -10,7 +10,7 @@ KarkasJS allows to you to make simple output of received JSON objects or arrays 
 ## Browser support
 Full support of Chrome, Firefox, Internet Explorer 8+.
 
-:warning: To use library for older versions of **IE (8 - 10)**, [promise-polyfill](https://github.com/taylorhakes/promise-polyfill) is required (only for `karkas.include` method).
+:warning: **IE (8 - 10)**: To use `karkas.include` method for older versions, [promise-polyfill](https://github.com/taylorhakes/promise-polyfill) is required.
 
 ## Installation
 You can install Karkas with **Bower** package manager - `bower install karkas` or just download the source code from this repo.
