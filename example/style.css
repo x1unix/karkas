@@ -1,0 +1,25 @@
+.grid-blk {
+            position: relative;
+        }
+        .grid-blk .source {
+            position: absolute;
+            top:100%;
+            left:0;
+            width:100%;
+            margin: 0 -1px;
+            background: white;
+            display: none;
+            border:1px solid #ddd;
+            border-top: none;
+            padding: 10px;
+            z-index:10;
+        }
+        .grid-blk:hover .source {
+            display: block;
+        }
+        code {
+            display: block;
+            word-wrap: break-word;
+            height:64px;
+            overflow:auto;
+        }

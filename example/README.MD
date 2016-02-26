@@ -2,12 +2,12 @@
 
 ## Tutorial
 
-#### 1. HTML and JS
+### 1. HTML and JS
 
 Create an HTML file, and include there **karkas.js** file.
 
 
-#### 2. Create an template
+### 2. Create an template
 
 To define a new template, create a new **template** tag. This block can be placed anywhere on page.
 Also you have to give a name for template with **name** attribute, for example:
@@ -17,7 +17,7 @@ Also you have to give a name for template with **name** attribute, for example:
 </script>
 ```
 
-#### 3. Add content and variables
+### 3. Add content and variables
 
 Inside template, you can place a regular HTML markup and variables, placed in moustache. Variable name must be the same as a key of array/object.
 
@@ -57,7 +57,7 @@ Can be parsed with this template:
 </script>
 ```
 
-#### 4. Parsing data
+### 4. Parsing data
 
 You can directly compile data using **karkas.compile**.
 It will return a compiled HTML as string, but also it allows to output result directly to HTML elements.
@@ -79,15 +79,93 @@ var compiledHTML = karkas.compile("myTemplate",singleObject);
 
 #### Unpacking simple arrays
 To unpack a simple array of strings or numbers, you can use `this` variable in templates:
-
 ```
 <script type="template/karkas" name="1">
 	<a href="{{this}}">{{this}}</a>
 </script>
 ```
+Also you can use `this` as object instance inside your templates.
+
+### 5. Filters
+
+You can filter values inside template using filters.
+Karkas has several embedded filters:
+
+* **currency** - convert number to currency expresssion (ex. 2.5 => "$ 2.50").
+* **json** - stringify object to JSON.
+* **capitalize** - capitalize string.
+* **toLower** - to lower case.
+* **toUpper** - to upper case.
+
+#### Filters usage
+
+To use filter for expression, add vertical line filter after object field and filter name inside expression:
+```
+<script type="template/karkas" name="demo">
+    <div class="item">
+        <b>{{name}}</b>: <span>{{price|currency}}
+    </div>
+</script>
+```
+
+Some filters can have additional arguments, for example - `currency` filter has currency symbol as optional argument:
+```
+<script type="template/karkas" name="demo">
+    <div class="item">
+        <b>{{name}}</b>: <span>{{price|currency:€}}
+    </div>
+</script>
+```
+All arguments have come after filter name, and separated by coma.
+
+#### Custom filters
+
+All filters are presented as functions and stored inside Karkas.
+To create a new filter, you can use `karkas.filters.add` function.
+
+**Example**
+```
+karkas.filters.add("myFilter", function(value, argument1, argument2) {
+    // Check if first argument is defined
+        if(typeof argument1 == "undefined") console.log("there is no argument1");
+        
+    // return filtered value
+        return value.toUpperCase();
+    });
+```
+
+First argument of filter function it's a expression value.
+All additional arguments will be passed after it.
+
+### 6. Use one template inside another
+Karkas allows to embed one template inside other.
+To do it, just use the same syntax as for filters, but type template name instead filter:
+
+```
+<!-- image template -->
+<script type="template/karkas" name="image-template">
+    <div class="img-responsive">
+        <img src="{{image}}" alt="{{title}}" />
+    </div>
+</script>
 
 
-## Including remote templates
+<!-- here is post template, here we will use image-template inside it to parse image -->
+<script type="template/karkas" name="post">
+    <article class="post">
+        <section>{{title}}</section>
+        
+        <!-- use object instance to parse image inside -->
+        {{this|image-template}}
+        
+        <p>{{text}}</p>
+        <a href="{{link}}">Read</a>
+    </article>
+</script>
+
+```
+
+### 6. Including remote templates
 Karkas allows to you to save your templates in files, and include them on demand using AJAX.
 Example of including templates is available in **ajax-template-example.html** file and require an HTTP server.
 

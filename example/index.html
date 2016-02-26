@@ -3,6 +3,7 @@
 <head>
 	<title>KarkasJS Example</title>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -33,16 +34,29 @@
         </button>
         <br /><br />
     </div>
-
+    <script type="template/karkas" name="image-frame">
+        <img src="{{this}}" class="img-responsive img-rounded" />
+    </script>
     <!-- 1. define a template inside html -->
+    
+    <!-- We will use capitalize filters for name and surname -->
+    <!-- and currency filter for price -->
+    <!-- For picture output we will use `image-frame` template -->
+    
     <script type="template/karkas" name="listTemplate">
     	<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-    		<div class="thumbnail">
-    			<img src="{{img}}" class="img-responsive img-rounded" />
+    		<div class="thumbnail grid-blk">
+    			{{img|image-frame}}
     			<div class="caption">
     				<h3>{{title}}</h3>
+                    <i>{{author.name|capitalize}} {{author.lastName|capitalize}}</i>
+                    <p><b>Price: {{price|currency:$}}</b></p>
     				<p>{{text}}</p>
-                    <i>{{author.name}} / {{author.lastName}}</i>
+                    <div class="source">
+                        <p><b>Original JSON:</b></p>
+                        <code>{{this|json}}</code>
+                    </div>
+                    
     			</div>
     		</div>
     	</div>	
@@ -58,35 +72,40 @@
     	{
     		img: "http://lorempixel.com/400/200/",
             author: {
-                name:"Lorem",
-                lastName: "Ipsum"
+                name:"lorem",
+                lastName: "ipsum"
             },
+            price: 10.5,
     		title: "Her yet there truth merit",
     		text: "An sincerity so extremity he additions. Her yet there truth merit. Mrs all projecting favourable now unpleasing. Son law garden chatty temper. Oh children provided to mr elegance marriage strongly."
     	},
     	{
     		img: "http://lorempixel.com/400/200/abstract/",
             author: {
-                name:"Dmitriy",
-                lastName: "Sokolov"
+                name:"dmitriy",
+                lastName: "sokolov"
             },
+            price: 200.03,
     		title: "Messenger bag migas ",
     		text: "Messenger bag migas VHS YOLO, swag ramps cred wayfarers typewriter kinfolk freegan. Street art poutine 90's kogi gluten-free portland, kitsch wolf microdosing try-hard gentrify green juice."
     	},
     	{
     		img: "http://lorempixel.com/400/200/cats/",
             author: {
-                name:"John",
-                lastName: "Miller"
-            },    		title: "Donec eget sapien est",
+                name:"john",
+                lastName: "miller"
+            },
+            price: 30,
+            title: "Donec eget sapien est",
     		text: "Kogi gluten-free portland, kitsch wolf microdosing try-hard green juice. Offal vinyl franzen synth. Quinoa polaroid pork belly, ramps brooklyn narwhal you probably haven't heard of them."
     	},
         {
             img: "http://lorempixel.com/400/200/people/",
             author: {
-                name:"Scott",
-                lastName: "Piligrimm"
+                name:"scott",
+                lastName: "piligrimm"
             },
+            price: 100,
             title: "Pellentesque maximus",
             text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam facilisis nec elit ut lobortis. Morbi dictum ipsum sed odio scelerisque, vulputate finibus arcu consectetur. Maecenas rhoncus neque"
         }
