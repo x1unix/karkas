@@ -3,18 +3,31 @@
  * Licensed by MIT license
  *
  * @author Denis Sedchenko
- * @version 2.1.7
+ * @version 2.4
  */
 var karkas = {
+    
+    version: "2.4",
     /*
      * Views container
      */
     views : [],
+    
+    
+    /**
+     * Parse filter expression for value
+     */
     filter: function(filterQuery, value) {
+        
+        // Extract filter name and args
         filterQuery = filterQuery.trim().split(":");
         var filterName = filterQuery[0];
+        
+        // Array of arguments that we will push to the filter
+        // At start there will be only expression value
         value = [value];
         
+        // Try to find another args
         if(filterQuery.length > 1) {
             var filterArgs = filterQuery[1].trim().split(",");
             for(var c = 0; c < filterArgs.length; c++) {
@@ -22,52 +35,84 @@ var karkas = {
             }
             value = value.concat(filterArgs);
         }
+        
+        // Find and call the filter with selected args
         var filter = karkas.filters.get(filterName);
         return filter.apply(filter,value);
     },
+    
+    /**
+     * Filters container
+     */
     filters: {
         __container__:{
+            /**
+             * Currency filter
+             */
             currency: function(val, currency) {
+                // Currency by default is USD
                 currency = currency || "$";
-                return currency+" "+val;
+                
+                var _valFloat = val % 1,
+                    _valInt   = parseInt(val);
+
+                var output = _valInt + ".";
+
+                // Format floating point numbers
+                output += (_valFloat < 0.1) ? "0"+parseInt(_valFloat*100) : String((_valFloat * 100));
+                
+                return currency+" "+output;
             },
+            /**
+             * JSON to string
+             */
             json: function(val) {
                 try {
                     return JSON.stringify(val);
                 } catch(ex) {
                     return val; 
                 }
+            },
+            toUpper: function(val) {
+                return String(val).toUpperCase();
+            },
+            toLower: function(val) {
+                return String(val).toLowerCase();
+            },
+            capitalize: function(val) {
+                val = String(val);
+                return val.substring(0,1).toUpperCase()+val.substring(1);
             }
         },
+        /**
+         * Get Filter
+         */
         get: function(filterName) {
             if(typeof this.__container__[filterName] == "undefined") return function(){};
             return this.__container__[filterName];
         },
+        
+        /**
+         * Add filter
+         */
         add: function(filterName, func) {
             this.__container__[filterName] = func;
         }
     },
-
-    version: "2.1.7",
-
-    /**
-     * Start finding templates at DOM content loaded
-     */
-    autorun: true,
 
     /**
      * Settings
      */
     params: {
         /**
+         * Start finding templates at DOM content loaded
+         */
+        autorun: true,
+        /**
          *  Parse expressions as array keys or object fields
          */
         parseAsObject: false,
 
-        /**
-         * Enable or disable legacy mode
-         */
-        allowTemplatesTag: false,
         /**
          * Will replace undefined properties with empty string
          */
@@ -82,16 +127,13 @@ var karkas = {
         // Views container
         this.views = [];
 
-        // Check if legacy `template` tag is enabled
-        // And select elements according to it
-        var querySelect = "script[type='template/karkas']";
-        if(this.params.allowTemplatesTag) querySelect += " ,template";
-        var w = document.querySelectorAll(querySelect);
+        // Select all templates
+        var w = document.querySelectorAll("script[type='template/karkas']");
 
         // Grep all elements
         for(var c = 0;  c < w.length; c++ )
         {
-            this.views[w[c].getAttribute("name")] = new karkasView(w[c]);
+            this.views[w[c].getAttribute("name")] = new KarkasView(w[c]);
         }
     },
 
@@ -200,7 +242,7 @@ var karkas = {
  * Karkas view class
  * @param viewElement name of view
  */
-var karkasView = function(viewElement) {
+var KarkasView = function(viewElement) {
     if(viewElement.getAttribute("name") == null || viewElement.getAttribute("name").length == 0) {
         throw new ReferenceError("KarkasJS: Template element must have a name");
     } else {
@@ -210,7 +252,7 @@ var karkasView = function(viewElement) {
     }
     
 };
-karkasView.prototype = {
+KarkasView.prototype = {
     pattern:/[{{](\S*)[}}]+/gim,
 
     /**
@@ -235,32 +277,23 @@ karkasView.prototype = {
         }
         for(var pat in tpFields){
             if(typeof tpFields[pat] == "string" || typeof tpFields[pat] == "number"){
-
-                
-                // Remove brackets
+                // Remove brackets and extract filters
                 var key = tpFields[pat].replace("{{","").replace("}}","").trim().split("|");
 
+                // Check for filters and expressions
                 var filter = (key.length > 1) ? key[key.length - 1] : undefined;
                     key = key[0];
                     
-                var newVal =  "";
-
-                if(key == "this" && typeof fields != "object") {
-                    newVal = fields;
-                } else {
-                    // Parse expression as array keys or object fields
-                    newVal = eval(
+                //  replace expression with object   
+                var newVal = (key == "this") ? fields : eval(
                         (karkas.params.parseAsObject) ? "fields."+key : "fields[\""+key.split(".").join("\"][\"")+"\"]"
-                        );
-                     
-                    if(isset(filter)) newVal = karkas[(isset(karkas.views[filter])) ? "compile" : "filter"](filter, newVal);
-
-                    if((typeof newVal == "undefined") && (karkas.params.replaceUndefinedExpressions == true)) {
-                        newVal = ""; 
-                    }
-                      
-                }
-
+                            );
+                // If value is undefined - replace it            
+                if((!isset(newVal)) && (karkas.params.replaceUndefinedExpressions)) newVal = "";
+                
+                // Use filter or template if available in expression
+                if(isset(filter)) newVal = karkas[(isset(karkas.views[filter])) ? "compile" : "filter"](filter, newVal);
+                
                 sReturn = sReturn.replace(tpFields[pat],newVal);
             }
         }
@@ -282,17 +315,13 @@ karkasView.prototype = {
 };
 
 (function(){
-
     // Register custom karkas elements and styles
-    document.createElement("template");
     document.createElement("karkas");
-    var css = (karkas.params.allowTemplatesTag == true) ? 'template,karkas{display: none;}' : "karkas{display: none;}",
+    var css = "karkas{display: none;}",
         head = document.head || document.getElementsByTagName('head')[0],
         style = document.createElement('style');
     style.type = 'text/css';
     style.styleSheet ? style.styleSheet.cssText = css : style.appendChild(document.createTextNode(css));
-
     head.appendChild(style);
-
-    if(karkas.autorun) karkas.findAll();
+    if(karkas.params.autorun) karkas.findAll();
 })();
