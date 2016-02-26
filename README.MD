@@ -2,10 +2,10 @@
 
 **Version: 2.4**
 
-A simple template engine for web apps
+A powerfull template engine for web apps
 
 ## About
-KarkasJS allows to you to make simple output of received JSON objects or arrays directly as HTML assets to your web application.
+Karkas allows to you to parse and filter JSON objects or arrays directly as HTML assets to your web application.
 
 ## Browser support
 Full support of Chrome, Firefox, Internet Explorer 8+.
@@ -17,7 +17,7 @@ You can install Karkas with **Bower** package manager - `bower install karkas` o
 
 ## Compatibility
 This library was writen using native JavaScript and does not requires any additional library to work.
-KarkasJS is compatible with **jQuery** and may be compatible with **AngularJS** if you're using remote templates.
+Karkas is compatible with **jQuery** and may be compatible with **AngularJS** if you're using remote templates.
 
 
 ## JSDoc
