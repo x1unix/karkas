@@ -10,6 +10,43 @@ var karkas = {
      * Views container
      */
     views : [],
+    filter: function(filterQuery, value) {
+        filterQuery = filterQuery.trim().split(":");
+        var filterName = filterQuery[0];
+        value = [value];
+        
+        if(filterQuery.length > 1) {
+            var filterArgs = filterQuery[1].trim().split(",");
+            for(var c = 0; c < filterArgs.length; c++) {
+                filterArgs[c] = filterArgs[c].trim();
+            }
+            value = value.concat(filterArgs);
+        }
+        var filter = karkas.filters.get(filterName);
+        return filter.apply(filter,value);
+    },
+    filters: {
+        __container__:{
+            currency: function(val, currency) {
+                currency = currency || "$";
+                return currency+" "+val;
+            },
+            json: function(val) {
+                try {
+                    return JSON.stringify(val);
+                } catch(ex) {
+                    return val; 
+                }
+            }
+        },
+        get: function(filterName) {
+            if(typeof this.__container__[filterName] == "undefined") return function(){};
+            return this.__container__[filterName];
+        },
+        add: function(filterName, func) {
+            this.__container__[filterName] = func;
+        }
+    },
 
     version: "2.1.7",
 
@@ -79,18 +116,14 @@ var karkas = {
         overwrite = overwrite || false;
 
         // If we have an array, parse as array
-        if(content instanceof Array) {
-            output = template.parseArray(content);
-        } else {
-            output = template.parse(content);
-        }
+        output = template[(content instanceof Array) ? "parseArray" : "parse"](content);
 
         // if target is false, return value
         if(target == false) return output;
 
         // == jQuery Support ==
         // Check if we have jQuery installed, and jQuery object is not empty
-        if((typeof jQuery !== "undefined") && target instanceof jQuery) {
+        if((typeof jQuery != "undefined") && target instanceof jQuery) {
             if(target.length > 0) {
                 target = target.get(0);
             } else {
@@ -187,6 +220,7 @@ karkasView.prototype = {
     getContext : function() {
         return this.element.innerHTML;
     },
+    
     /**
      * Parse an single object using the template
      * @param fields Object
@@ -196,12 +230,19 @@ karkasView.prototype = {
         var sReturn    = this.getContext(),
             tpFields   = sReturn.match(this.pattern);
 
+        function isset(e) {
+            return typeof e != "undefined";    
+        }
         for(var pat in tpFields){
             if(typeof tpFields[pat] == "string" || typeof tpFields[pat] == "number"){
 
+                
                 // Remove brackets
-                var key = tpFields[pat].replace("{{","").replace("}}","");
+                var key = tpFields[pat].replace("{{","").replace("}}","").trim().split("|");
 
+                var filter = (key.length > 1) ? key[key.length - 1] : undefined;
+                    key = key[0];
+                    
                 var newVal =  "";
 
                 if(key == "this" && typeof fields != "object") {
@@ -211,7 +252,13 @@ karkasView.prototype = {
                     newVal = eval(
                         (karkas.params.parseAsObject) ? "fields."+key : "fields[\""+key.split(".").join("\"][\"")+"\"]"
                         );
-                    if((typeof newVal == "undefined") && (replaceUndefinedExpressions == true)) newVal = "";    
+                     
+                    if(isset(filter)) newVal = karkas[(isset(karkas.views[filter])) ? "compile" : "filter"](filter, newVal);
+
+                    if((typeof newVal == "undefined") && (karkas.params.replaceUndefinedExpressions == true)) {
+                        newVal = ""; 
+                    }
+                      
                 }
 
                 sReturn = sReturn.replace(tpFields[pat],newVal);
