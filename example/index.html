@@ -48,9 +48,9 @@
     		<div class="thumbnail grid-blk">
     			{{img|image-frame}}
     			<div class="caption">
-    				<h3>{{title}}</h3>
+    				<h3>{{title|string:"toUpperCase"}}</h3>
                     <i>{{author.name|capitalize}} {{author.lastName|capitalize}}</i>
-                    <p><b>Price: {{price|currency:$}}</b></p>
+                    <p><b>Price: {{price|currency:"$"}}</b></p>
     				<p>{{text}}</p>
                     <div class="source">
                         <p><b>Original JSON:</b></p>

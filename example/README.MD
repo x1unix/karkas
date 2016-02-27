@@ -97,6 +97,8 @@ Karkas has several embedded filters:
 * **toLower** - to lower case.
 * **toUpper** - to upper case.
 
+Full list of filters and manual are available in `FILTERS.MD` file.
+
 #### Filters usage
 
 To use filter for expression, add vertical line filter after object field and filter name inside expression:
@@ -112,11 +114,12 @@ Some filters can have additional arguments, for example - `currency` filter has 
 ```
 <script type="template/karkas" name="demo">
     <div class="item">
-        <b>{{name}}</b>: <span>{{price|currency:€}}
+        <b>{{name}}</b>: <span>{{price|currency:"€"}}
     </div>
 </script>
 ```
 All arguments have come after filter name, and separated by coma.
+Only scalar types, strings and booleans are acceptable as filter arguments.
 
 #### Custom filters
 
