@@ -1,13 +1,13 @@
 /**
- * KarkasJS (https://github.com/odin3/karkasJS)
+ * Karkas.JS (https://github.com/odin3/karkas)
  * Licensed by MIT license
  *
  * @author Denis Sedchenko
- * @version 2.4
+ * @version 2.4.1
  */
 var karkas = {
     
-    version: "2.4",
+    version: "2.4.1",
     /*
      * Views container
      */
@@ -29,16 +29,21 @@ var karkas = {
         
         // Try to find another args
         if(filterQuery.length > 1) {
-            var filterArgs = filterQuery[1].trim().split(",");
-            for(var c = 0; c < filterArgs.length; c++) {
-                filterArgs[c] = filterArgs[c].trim();
-            }
+            // var filterArgs = filterQuery[1].trim().split(",");
+            // for(var c = 0; c < filterArgs.length; c++) {
+            //     filterArgs[c] = filterArgs[c].trim();
+            // }
+            var filterArgs = eval("["+filterQuery[1].trim()+"]");
             value = value.concat(filterArgs);
         }
         
-        // Find and call the filter with selected args
-        var filter = karkas.filters.get(filterName);
-        return filter.apply(filter,value);
+        try {
+            // Find and call the filter with selected args
+            var filter = karkas.filters.get(filterName);
+            return filter.apply(filter,value);
+        } catch(ex) {
+            throw new Error("Karkas: failed to apply filter '"+filterName+"', reason: "+ex.message);
+        }
     },
     
     /**
@@ -49,19 +54,39 @@ var karkas = {
             /**
              * Currency filter
              */
-            currency: function(val, currency) {
+            currency: function($value, $currency) {
                 // Currency by default is USD
-                currency = currency || "$";
+                $currency = $currency || "$";
                 
-                var _valFloat = val % 1,
-                    _valInt   = parseInt(val);
+                var _valFloat = $value % 1,
+                    _valInt   = parseInt($value);
 
                 var output = _valInt + ".";
 
                 // Format floating point numbers
                 output += (_valFloat < 0.1) ? "0"+parseInt(_valFloat*100) : String((_valFloat * 100));
                 
-                return currency+" "+output;
+                return $currency+" "+output;
+            },
+            /**
+             * String manipulation filter.
+             * Calls a method for String class with args
+             */
+            string: function($value, $operation) {
+                try {
+                    var $args = [].splice.apply(arguments,[2]);
+                    return ""[$operation].apply($value,$args);
+                } catch(ex) {
+                    throw new Error("Failed to perform method `String."+$operation+"` ("+ex.message+")");
+                }
+            },
+            math: function($value, $operation) {
+                try {
+                    [].splice.apply(arguments,[1,1]);
+                    return Math[$operation].apply(Math,arguments);
+                } catch(ex) {
+                    throw new Error("Failed to perform method `Math."+$operation+"` ("+ex.message+")");
+                }
             },
             /**
              * JSON to string
@@ -88,7 +113,7 @@ var karkas = {
          * Get Filter
          */
         get: function(filterName) {
-            if(typeof this.__container__[filterName] == "undefined") return function(){};
+            if(typeof this.__container__[filterName] == "undefined") throw new ReferenceError("Karkas: undefined filter or template: '"+filterName+"'");
             return this.__container__[filterName];
         },
         
@@ -284,10 +309,15 @@ KarkasView.prototype = {
                 var filter = (key.length > 1) ? key[key.length - 1] : undefined;
                     key = key[0];
                     
-                //  replace expression with object   
-                var newVal = (key == "this") ? fields : eval(
+                //  replace expression with object  
+                var newVal;
+                try {
+                    newVal = (key == "this") ? fields : eval(
                         (karkas.params.parseAsObject) ? "fields."+key : "fields[\""+key.split(".").join("\"][\"")+"\"]"
                             );
+                } catch(ex) {
+                    throw new ReferenceError("Karkas: failed to parse expression '"+key+"' in template '"+this.name+"'. "+ex.message);
+                }
                 // If value is undefined - replace it            
                 if((!isset(newVal)) && (karkas.params.replaceUndefinedExpressions)) newVal = "";
                 
