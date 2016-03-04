@@ -278,7 +278,10 @@ var KarkasView = function(viewElement) {
     
 };
 KarkasView.prototype = {
-    pattern:/[{{](\S*)[}}]+/gim,
+    /**
+     * Pattern for expressions ( {{value}} )
+     */
+    pattern: /[\{\{](.*?)[\}\}]+/gim,
 
     /**
      * Returns an HTML text of template
@@ -301,6 +304,7 @@ KarkasView.prototype = {
             return typeof e != "undefined";    
         }
         for(var pat in tpFields){
+            console.log(tpFields[pat]);
             if(typeof tpFields[pat] == "string" || typeof tpFields[pat] == "number"){
                 // Remove brackets and extract filters
                 var key = tpFields[pat].replace("{{","").replace("}}","").trim().split("|");
