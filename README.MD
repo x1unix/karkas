@@ -27,6 +27,4 @@ Original non-compiled **karkas.js** file has embedded JSDoc markup, that allows 
 
 Tutorial is included in **example** folder.
 
-![Karkas Logo](https://raw.githubusercontent.com/odin3/karkas/master/example/karkas-logo-xs.jpg)
-
 
