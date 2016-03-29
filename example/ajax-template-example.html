@@ -65,10 +65,12 @@
     ];
 
     // 4. Get templates from url and parse posts using them
-     karkas.include("template.html").then(function(){
-        karkas.compile("listTemplate",data,"#container",true);
-    }).catch(function (err) {
-        console.error('Augh, there was an error!', err.statusText);
+    document.addEventListener('DOMContentLoaded', function() {
+        karkas.include("template.html").then(function(){
+            karkas.compile("listTemplate",data,"#container",true);
+        }).catch(function (err) {
+            console.error('Augh, there was an error!', err.statusText);
+        });
     });
 
 

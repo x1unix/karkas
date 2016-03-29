@@ -114,7 +114,11 @@
     // 4. Overwrite container using compiled HTML with data using out template
     //  Args:
     // templateName, data (Array or Object), html element / string [optional], overwrite content [optional]
-    karkas.compile("listTemplate",data,"#container",true);
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        karkas.compile("listTemplate",data,"#container",true);
+        
+    });
 
 
     // 5. Load more items and draw it
