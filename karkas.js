@@ -219,7 +219,7 @@
         if(!refreshItems) templateSelector += ':not([data-loaded])';
         
         // Select all templates
-        var w = document.querySelectorAll(templateSelector);
+        var w = $document.querySelectorAll(templateSelector);
 
         // Grep all elements
         for(var c = 0;  c < w.length; c++ )
@@ -287,7 +287,7 @@
         // if we have a single HTML object, work with it and break
         if(target instanceof HTMLElement) return karkas__pasteData(target);
 
-        if(typeof target == "string") target = document.querySelectorAll(target);
+        if(typeof target == "string") target = $document.querySelectorAll(target);
         for(var i = 0; i < target.length; i++){
             karkas__pasteData(target[i]);
         }
@@ -302,7 +302,7 @@
      */
     include: function(url) {
         return new Promise(function (resolve, reject) {
-            var body  = document.querySelector('body');
+            var body  = $document.querySelector('body');
             if(!body) throw new Error('Karkas: body element is required in DOM');
             var xhr = new XMLHttpRequest();
             xhr.open("GET", url);
@@ -439,7 +439,7 @@ karkas.View = function(viewElement) {
 
 $window.karkas = karkas;
 
-document.addEventListener("DOMContentLoaded", function(){
+$document.addEventListener("DOMContentLoaded", function(){
     // Register custom karkas elements and styles
     if(karkas.params.autorun) karkas.refresh(true);
 });
