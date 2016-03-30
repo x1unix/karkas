@@ -3,13 +3,13 @@
  * Licensed by MIT license
  *
  * @author Denis Sedchenko
- * @version 2.4.3
+ * @version 2.4.4
  */
 
 (function($window, $document){
     var karkas = {
     
-    version: "2.4.3",
+    version: "2.4.4",
     /*
      * Views container
      */
@@ -97,10 +97,6 @@
         
         // Try to find another args
         if(filterQuery.length > 1) {
-            // var filterArgs = filterQuery[1].trim().split(",");
-            // for(var c = 0; c < filterArgs.length; c++) {
-            //     filterArgs[c] = filterArgs[c].trim();
-            // }
             var filterArgs = eval("["+filterQuery[1].trim()+"]");
             value = value.concat(filterArgs);
         }
@@ -122,19 +118,24 @@
             /**
              * Currency filter
              */
-            currency: function($value, $currency) {
+            currency: function($value, $currency, $digitsToFixed) {
                 // Currency by default is USD
                 $currency = $currency || "$";
                 
-                var _valFloat = $value % 1,
-                    _valInt   = parseInt($value);
-
-                var output = _valInt + ".";
-
-                // Format floating point numbers
-                output += (_valFloat < 0.1) ? "0"+parseInt(_valFloat*100) : String((_valFloat * 100));
                 
-                return $currency+" "+output;
+                function formatMoney(n, c, d, t){
+                    var c = isNaN(c = Math.abs(c)) ? 2 : c, 
+                        d = d == undefined ? "." : d, 
+                        t = t == undefined ? "," : t, 
+                        s = n < 0 ? "-" : "", 
+                        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+                        j = (j = i.length) > 3 ? j % 3 : 0;
+                       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+                }
+                
+                return $currency+" "+formatMoney($value, $digitsToFixed);
+                
+                
             },
             /**
              * String manipulation filter.
@@ -251,6 +252,8 @@
         var output   = "",
             template = this.getView(templateName);
 
+        content = content || {};
+        
         // If target is undefined, make it 'false'
         target = target || false;
 
@@ -378,6 +381,18 @@ karkas.View = function(viewElement) {
         return (useCache && (contextCache !== null) ) ? contextCache : this.element.innerHTML;
     };
     
+    
+    /**
+     * Parse single expression from object
+     * @param   {Object} $_object     Object
+     * @param   {String} $_expression Expression
+     * @returns {*} Value
+     */
+    function parseExpression($_object, $_expression) {
+        return new Function('with(this) { return '+$_expression+'; }').apply($_object);
+    }
+    
+    
     /**
      * Parse an single object using the template
      * @param fields Object
@@ -403,9 +418,7 @@ karkas.View = function(viewElement) {
                 //  replace expression with object  
                 var newVal;
                 try {
-                    newVal = (key == "this") ? fields : eval(
-                        (karkas.params.parseAsObject) ? "fields."+key : "fields[\""+key.split(".").join("\"][\"")+"\"]"
-                            );
+                    newVal = parseExpression(fields, key);
                 } catch(ex) {
                     throw new ReferenceError("Karkas: failed to parse expression '"+key+"' in template '"+this.name+"'. "+ex.message);
                 }
