@@ -26,12 +26,156 @@
       </div>
     </nav>
     <div class="container">
-    	<div class="row" id="container">
-
+        <div class="box-block">
+            <h1>
+                Calculations
+                <small>You can persorm calculations inside expressions</small>
+            </h1>
+            <br />
+            <div class="row">
+                <div class="col-md-8">
+                    <p class="subtitle">Code:</p>
+                    <code>
+                            {{'Hello' + 'World'}} <br />
+                            2+2 = {{2+2}}
+                    </code>
+                </div>
+                <div class="col-md-4">
+                    <p class="subtitle">Result:</p>
+                    <script type='template/karkas' name='calcDemo'>
+                            {{'Hello ' + 'World'}} <br />
+                            2+2 = {{2+2}}
+                    </script>
+                    <code id="calculationsResult">
+                    </code>
+                </div>
+            </div>
         </div>
-        <button class="btn btn-lg btn-primary center-block" onclick="loadMoreItems();">
-            Load more
-        </button>
+        
+        <div class="box-block">
+            <h1>
+                <p class="subtitle">Filters</p>
+                <small>You can pass values of object inside filters</small>
+            </h1>
+            <br />
+            <div class="row">
+                <div class="col-md-8">
+                    <p class="subtitle">Code:</p>
+                    <code>
+                            Price :{{price|currency}} <br />
+                            Original JSON: <br />
+                            {{this|json}}
+                    </code>
+                </div>
+                <div class="col-md-4">
+                    <p class="subtitle">Result:</p>
+                    <script type='template/karkas' name='filtersDemo'>
+                            Price :{{price|currency:'&euro;'}} <br />
+                            Original JSON: <br />
+                            {{this|json}}
+                    </script>
+                    <code id="filtersResult">
+                    </code>
+                </div>
+            </div>
+        </div>
+        
+        <div class="box-block">
+            <h1>
+                Recursive parsing
+                <small>You can parse an array inside your object using templates</small>
+            </h1>
+            <br />
+            <div class="row">
+                <div class="col-md-8">
+                    <p class="subtitle">Code:</p>
+                    <pre style='height:240px;'>
+&lt;script type='template/karkas' name='listBox'&gt;
+   &lt;b&gt;{{title}}&lt;/b&gt;
+   &lt;ul&gt;
+     {{items|listBoxItem}}
+   &lt;/ul&gt;
+&lt;/script&gt;
+
+&lt;script type='template/karkas' name='listBoxItem'&gt;
+  &lt;li&gt;
+   &lt;label&gt;
+       &lt;input type="checkbox" id="item_{{id}}" /&gt;
+       {{title}}
+   &lt;label/&gt;
+  &lt;/li&gt; 
+&lt;/script&gt;  
+
+&lt;script&gt;
+   var listBoxes = [
+       {
+           title: 'ToDo List',
+           items: [
+               {
+                   id: 0,
+                   title: 'Wash dishes'
+               },
+               {
+                   id: 0,
+                   title: 'Clear carpet'
+               },
+           ]
+       },
+       {
+           title: 'Meetups',
+           items: [
+               {
+                   id: 0,
+                   title: 'Meet with Freddy'
+               },
+               {
+                   id: 0,
+                   title: 'Corporative at sunday'
+               },
+           ]
+       }
+   ];
+   
+   karkas.compile('listBox', listBoxes, '#listBoxDemo');
+&lt;/script&gt;   
+                    </pre>
+                </div>
+                <div class="col-md-4">
+                    <p class="subtitle">Result:</p>
+                    <script type='template/karkas' name='listBox'>
+                       <b>{{title}}</b>
+                       <ul>
+                         {{items|listBoxItem}}
+                       </ul>
+                    </script>
+
+                    <script type='template/karkas' name='listBoxItem'>
+                       <li>
+                        <label>
+                           <input type="checkbox" id="item_{{id}}" />
+                           {{title}}
+                        <label/>
+                       </li>
+                    </script> 
+                    <div id="listBoxDemo">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="box-block">
+            <h1>
+                List parsing
+                <small>Parsing an array of objects or a single JSON</small>
+            </h1>
+            <br />
+            <div class="row" id="container">
+
+            </div>
+            <button class="btn btn-lg btn-primary center-block" onclick="loadMoreItems();">
+                Load more
+            </button>
+        </div>
         <br /><br />
     </div>
     <script type="template/karkas" name="image-frame">
@@ -63,7 +207,7 @@
     </script>
 
     <!-- 2. Connect a KarkasJS -->
-    <script type="text/javascript" src="../karkas.js"></script>
+    <script type="text/javascript" src="../karkas.min.js"></script>
 
 
     <script type="text/javascript">
@@ -118,6 +262,41 @@
         
         karkas.compile("listTemplate",data,"#container",true);
         
+        // Demos
+        karkas.compile('calcDemo',{},'#calculationsResult');
+        karkas.compile('filtersDemo',{price: 13800.183},'#filtersResult');
+        
+        // List Box Demo
+        var listBoxes = [
+       {
+           title: 'ToDo List',
+           items: [
+               {
+                   id: 0,
+                   title: 'Wash dishes'
+               },
+               {
+                   id: 0,
+                   title: 'Clear carpet'
+               },
+           ]
+       },
+       {
+           title: 'Meetups',
+           items: [
+               {
+                   id: 0,
+                   title: 'Meet with Freddy'
+               },
+               {
+                   id: 0,
+                   title: 'Corporative at sunday'
+               },
+           ]
+       }
+   ];
+
+       karkas.compile('listBox', listBoxes, '#listBoxDemo');
     });
 
 
