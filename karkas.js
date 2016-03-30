@@ -67,18 +67,7 @@
          * 
          * Default: "script[type='template/karkas']"
          */
-        templateSourceSelector: "script[type='template/karkas']",
-        
-        /**
-         *  Parse expressions as regular objects
-         *  
-         * false: Karkas will parse expression as associative
-         *        array. (Recommended)
-         *        
-         * true:  Karkas will parse as objects (may cause errors)
-         * 
-         */
-        parseAsObject: false,
+        templateSourceSelector: "script[type='template/karkas']"
 
     },
     
