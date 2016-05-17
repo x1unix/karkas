@@ -122,7 +122,7 @@
             /**
              * Currency filter
              */
-            currency: function($value, $currency, $digitsToFixed) {
+            'currency': function($value, $currency, $digitsToFixed) {
                 // Currency by default is USD
                 $currency = $currency || "$";
                 
