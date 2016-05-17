@@ -3,7 +3,7 @@
  * Licensed by MIT license
  *
  * @author Denis Sedchenko
- * @version 2.4.5
+ * @version 2.4.7
  */
 
 (function($window, $document){
@@ -14,7 +14,7 @@
 
     var karkas = {
     
-    version: "2.4.5",
+    version: "2.4.7",
     /*
      * Views container
      */
