@@ -145,7 +145,7 @@
              * String manipulation filter.
              * Calls a method for String class with args
              */
-            string: function($value, $operation) {
+            'string': function($value, $operation) {
                 try {
                     var $args = [].splice.apply(arguments,[2]);
                     return ""[$operation].apply($value,$args);
@@ -153,7 +153,7 @@
                     throw new Error("Failed to perform method `String."+$operation+"` ("+ex.message+")");
                 }
             },
-            math: function($value, $operation) {
+            'math': function($value, $operation) {
                 try {
                     [].splice.apply(arguments,[1,1]);
                     return Math[$operation].apply(Math,arguments);
@@ -161,23 +161,31 @@
                     throw new Error("Failed to perform method `Math."+$operation+"` ("+ex.message+")");
                 }
             },
+            'array': function($value, $operation) {
+                try {
+                    var $args = [].splice.apply(arguments,[2]);
+                    return ([])[$operation].apply($value,$args);
+                } catch(ex) {
+                    throw new Error("Failed to perform method `Array."+$operation+"` ("+ex.message+")");
+                }
+            },
             /**
              * JSON to string
              */
-            json: function(val) {
+            'json': function(val) {
                 try {
                     return JSON.stringify(val);
                 } catch(ex) {
                     return val; 
                 }
             },
-            toUpper: function(val) {
+            'toUpper': function(val) {
                 return String(val).toUpperCase();
             },
-            toLower: function(val) {
+            'toLower': function(val) {
                 return String(val).toLowerCase();
             },
-            capitalize: function(val) {
+            'capitalize': function(val) {
                 val = String(val);
                 return val.substring(0,1).toUpperCase()+val.substring(1);
             }
