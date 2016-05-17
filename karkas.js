@@ -320,11 +320,10 @@
     /**
      * Load templates from remote URL
      * @param url URL
-     * @return promise
+     * @param successCallback onSuccess callback
      */
-    include: function(url) {
-
-        return new Promise(function (resolve, reject) {
+    include: function(url, successCallback) {
+        function makeRequest(onSuccess, onError) {
             var body  = $document.querySelector('body');
             if(!body) throw new Error('Karkas: body element is required in DOM');
             var xhr = new XMLHttpRequest();
@@ -333,21 +332,27 @@
                 if (this.status >= 200 && this.status < 300) {
                     body.innerHTML += xhr.response;
                     karkas.refresh();
-                    resolve(xhr.response);
+                    onSuccess(xhr.response);
                 } else {
-                    reject({
+                    onError({
                         status: this.status,
                         statusText: xhr.statusText
                     });
                 }
             };
             xhr.onerror = function () {
-                reject({
+                onError({
                     status: this.status,
                     statusText: xhr.statusText
                 });
             };
             xhr.send();
+        }
+
+        if( (typeof successCallback == 'function') || (typeof window.Promise == 'undefined') ) return makeRequest(successCallback);
+
+        return new Promise(function (resolve, reject) {
+            makeRequest(resolve, reject);
         });
     },
     /*
