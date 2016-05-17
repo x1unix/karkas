@@ -17,6 +17,19 @@ Also you have to give a name for template with **name** attribute, for example:
 </script>
 ```
 
+Also you can insert template as string by JavaScript API:
+```
+// Create template instance
+var template = new karkas.View('<b>Name:</b> {{name}}', 'myTemplate');
+
+// Register template
+template.apply();
+```
+Or use existing HTML element:
+```
+var tpl = new karkas.View(document.querySelector('.item'), 'myTemplate');
+```
+
 ### 3. Add content and variables
 
 Inside template, you can place a regular HTML markup and variables, placed in moustache. Variable name must be the same as a key of array/object.
@@ -77,6 +90,7 @@ Just parse a single object and return data to variable:
 var compiledHTML = karkas.compile("myTemplate",singleObject);
 ```
 
+Also you can store all templates in separate file (see **Including remote templates**).
 #### Unpacking simple arrays
 To unpack a simple array of strings or numbers, you can use `this` variable in templates:
 ```
@@ -168,13 +182,13 @@ To do it, just use the same syntax as for filters, but type template name instea
 
 ```
 
-### 6. Including remote templates
+### 6. Store templates in separate files
 Karkas allows to you to save your templates in files, and include them on demand using AJAX.
 Example of including templates is available in **ajax-template-example.html** file and require an HTTP server.
 
 A simple example of including a template and parsing data using it:
 
-**index.html:**
+**index.html (with Promise support):**
 ```
 karkas.include("template.html").then(function(){
     karkas.compile("listTemplate",data,"#container",true);
@@ -182,6 +196,14 @@ karkas.include("template.html").then(function(){
     console.error('Augh, there was an error!', err.statusText);
 });
 ```
+
+**index.html (Regular callback):**
+```
+karkas.include("template.html", function(){
+    karkas.compile("listTemplate",data,"#container",true);
+});
+```
+
 **template.html**
 ```
 <script type="template/karkas" name="listTemplate">
