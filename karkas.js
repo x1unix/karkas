@@ -3,13 +3,18 @@
  * Licensed by MIT license
  *
  * @author Denis Sedchenko
- * @version 2.4.4
+ * @version 2.4.5
  */
 
 (function($window, $document){
+
+    function def(el) {
+        return typeof el != 'undefined';
+    }
+
     var karkas = {
     
-    version: "2.4.4",
+    version: "2.4.5",
     /*
      * Views container
      */
@@ -28,7 +33,7 @@
          *        content loaded.
          */
         autorun: true,
-        
+
         /**
          * Cache template content.
          * 
@@ -70,7 +75,17 @@
         templateSourceSelector: "script[type='template/karkas']"
 
     },
-    
+    /**
+     * Internal logger
+     * @param msgTxt
+     * @param msgType
+     * @returns {null}
+     */
+    log: function(msgTxt, msgType) {
+      msgType = msgType || 'log';
+      msgTxt  = "Karkas: "+msgTxt;
+      return ( def($window.console) && def($window.console[msgType]) ) ? $window.console[msgType](msgTxt) : null;
+    },
     /**
      * Parse filter expression for value
      */
@@ -197,7 +212,7 @@
      * Function called when Karkas is searching for elements
      */
     onFind: function() {},
-    
+
     /**
      * Load all templates on the page into karkas
      */
@@ -216,14 +231,29 @@
         {
             this.views[w[c].getAttribute("name")] = new karkas.View(w[c]);
         }
+
+        // find items by attr and parse them
+        var requestedToParse = $document.querySelector('*['+this.params.elementsSelector+']');
+
+        if(is_null(requestedToParse)) return true;
+
+        for(var i = 0; i < requestedToParse.length; i++) {
+            this.applyToElement(requestedToParse[i]);
+        }
+
         if(typeof this.onFind == 'function') this.onFind();
     },
+
     
     /**
      * Reload items (Deprecated, use 'refresh')
      */
     findAll: function(refreshItems) {
         return this.refresh(refreshItems);
+    },
+
+    exists: function(templateName) {
+     return def(this.views[templateName]);
     },
     
 
@@ -293,6 +323,7 @@
      * @return promise
      */
     include: function(url) {
+
         return new Promise(function (resolve, reject) {
             var body  = $document.querySelector('body');
             if(!body) throw new Error('Karkas: body element is required in DOM');
@@ -331,11 +362,31 @@
 
 /**
  * Karkas view class
+ * @param name template name (optional)
  * @param viewElement name of view
  */
-karkas.View = function(viewElement) {
-    if(viewElement.getAttribute("name") == null || viewElement.getAttribute("name").length == 0) 
-        throw new ReferenceError("KarkasJS: Template element must have a name");
+karkas.View = function(viewElement, name) {
+    if(!def(viewElement)) throw new ReferenceError("KarkasJS: karkas.View: viewElement is not defined.");
+
+    // Check if view created from HTML element
+    this.hasElement = (viewElement instanceof HTMLElement);
+
+
+    if(!this.hasElement && !(typeof viewElement == 'string') )
+        throw new TypeError("KarkasJS: View content can be only HTMLElement or String");
+
+    // Extract template name
+    if(this.hasElement) {
+        if( !def(name) ) {
+            if(viewElement.getAttribute("name") == null || viewElement.getAttribute("name").length == 0)
+            {
+                throw new ReferenceError("KarkasJS: Template element must have a name");
+            } else {
+                name = viewElement.getAttribute("name");
+            }
+        }
+
+    }
 
     /**
      * Pattern for expressions ( {{value}} )
@@ -343,22 +394,30 @@ karkas.View = function(viewElement) {
     this.pattern    = /[\{\{](.*?)[\}\}]+/gim;
     
     
-    this.name       = viewElement.getAttribute("name") || "";
-    this.element    = (karkas.params.removeTemplatesFromDom) ? null : viewElement;
+    this.name       = name;
+    this.element    = (karkas.params.removeTemplatesFromDom || !this.hasElement) ? null : viewElement;
     
-   var contextCache = (karkas.params.useTemplateCache) ? viewElement.innerHTML.trim() : null,
+   var contextCache = null,
         self        = this,
         rmFromDom   = karkas.params.removeTemplatesFromDom,
         useCache    = karkas.params.useTemplateCache;
-    
-    
-    if(rmFromDom) {
-        // Remove element from DOM if feature is enabled
-        viewElement.remove();
+
+    if(this.hasElement) {
+        contextCache = (karkas.params.useTemplateCache) ? viewElement.innerHTML.trim() : null;
+
+        if(rmFromDom) {
+            // Remove element from DOM if feature is enabled
+            viewElement.remove();
+        } else {
+            // Mark HTML element as loaded, to prevent double loading
+            this.element.setAttribute('data-loaded','true');
+        }
+
     } else {
-        // Mark HTML element as loaded, to prevent double loading
-        this.element.setAttribute('data-loaded','true');
+        contextCache = viewElement;
     }
+
+
   
     /**
      * Returns an HTML of template
@@ -368,6 +427,16 @@ karkas.View = function(viewElement) {
         if(this.element == null || rmFromDom && useCache) return contextCache;
         
         return (useCache && (contextCache !== null) ) ? contextCache : this.element.innerHTML;
+    };
+
+    this.apply = function(replaceIfExists) {
+        replaceIfExists = replaceIfExists || false;
+        if(karkas.exists(this.name) && !replaceIfExists) {
+            karkas.log('Cannot apply new template, "'+this.name+'" already exists. Use "apply(true)" to overwrite it.', 'warn');
+            return false;
+        }
+        karkas.views[self.name] = this;
+        return true;
     };
     
     
@@ -444,7 +513,12 @@ $window.karkas = karkas;
 $document.addEventListener("DOMContentLoaded", function(){
     // Register custom karkas elements and styles
     if(karkas.params.autorun) karkas.refresh(true);
+
+
 });
+function is_null(o) {
+    return o == null;
+}
 
 
 })(window, document);
