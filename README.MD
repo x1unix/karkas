@@ -1,16 +1,14 @@
 # Karkas
 
-**Version: 2.4.4**
+**Version: 2.4.7**
 
-A powerfull template engine for web apps
+A powerfull template engine for web apps, inspired by AngularJS.
 
 ## About
 Karkas allows to you to parse and filter JSON objects or arrays directly as HTML assets to your web application.
 
 ## Browser support
 Full support of Chrome, Firefox, Internet Explorer 9+.
-
-:warning: **IE (9 - 10)**: To use `karkas.include` method for older versions, [promise-polyfill](https://github.com/taylorhakes/promise-polyfill) is required.
 
 ## Installation
 You can install Karkas with **Bower** package manager - `bower install karkas` or just download the source code from this repo.
