@@ -101,7 +101,7 @@
         
         // Try to find another args
         if(filterQuery.length > 1) {
-            var filterArgs = eval("["+filterQuery[1].trim()+"]");
+            var filterArgs = (new Function("return ["+filterQuery[1].trim()+"]"))();
             value = value.concat(filterArgs);
         }
         
