@@ -1,1 +1,0 @@
-window.karkas = require('../karkas.js');

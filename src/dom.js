@@ -7,4 +7,6 @@
  * @author Denis Sedchenko
  */
 
-// nothing
+module.exports = function(karkas) {
+
+};
