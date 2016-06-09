@@ -8,9 +8,6 @@
  */
 
 module.exports = function(karkas) {
-    function is_null(o) {
-        return o == null;
-    }
     function def(el) {
         return typeof el != 'undefined';
     }
@@ -82,7 +79,7 @@ module.exports = function(karkas) {
                   if( !def(newVal) ) newVal = "";
 
                   // Use filter or template if available in expression
-                  if( def(filter))  newVal = karkas[(isset(karkas.views[filter])) ? "compile" : "filter"](filter, newVal);
+                  if( def(filter))  newVal = karkas[(def(karkas.views[filter])) ? "compile" : "filter"](filter, newVal);
 
                   sReturn = sReturn.replace(currentField,newVal);
               }

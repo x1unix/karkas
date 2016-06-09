@@ -7,4 +7,13 @@
  * @author Denis Sedchenko
  */
 
-module.exports = new (require('./src/karkas.core.js'))();
+/**
+ * Call a new Karkas instance
+ * @param useDomExtensions bool Include DOM extension
+ * @returns {*}
+ */
+module.exports = function(useDomExtensions) {
+   var karkas = new (require('./src/core.js'))();
+    if(useDomExtensions) require('./src/dom.js')(karkas);
+    return karkas;
+};
