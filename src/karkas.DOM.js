@@ -3,8 +3,10 @@
  * Licensed by MIT license
  *
  * DOM wrapper for Karkas.js
- * 
+ *
  * @package karkas.DOM
  * @version 3.0.0-b1
  * @author Denis Sedchenko
  */
+
+// Silence is golden
