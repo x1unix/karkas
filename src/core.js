@@ -3,10 +3,9 @@
  * Licensed by MIT license
  *
  * @package karkas.core
- * @version 3.0.0-a1
+ * @version 3.0.0-b4
  * @author Denis Sedchenko
  */
-
 module.exports = function() {
 
     function def(el) {
@@ -19,7 +18,7 @@ module.exports = function() {
         'major': 2,
         'minor': 0,
         'patch': 0,
-        'build': 0,
+        'build': 4,
         'toString': function() {
             with(this) {
                 return[major, minor, patch].join('.');
@@ -43,15 +42,12 @@ module.exports = function() {
          */
         add: function(filterName, func) {
             this.__container__[filterName] = func;
-        },
-
-        /**
-         * Remove all views from Karkas
-         */
+        }
 
     };
 
-    require('./karkas.View.js')(self);
+    require('./view.js')(self);
+    require('./filters.js')(self);
 
     this.getView = function(vId) {
         if(typeof self.views[vId] == "undefined") throw new ReferenceError("KarkasJS: Requested template is not defined: '"+vId+"'");
