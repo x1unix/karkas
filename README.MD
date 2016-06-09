@@ -25,6 +25,19 @@ You can install Karkas with **Bower** package manager - `bower install karkas` o
 **Node**
 Just run `npm install karkas` and connect it as node module.
 
+## Build Library
+This packkage already contains builded .js file, but you can
+modify it and build your own package.
+
+To build Karkas for usage in front-end as standalone library,
+you have to install **Browserify** and compile `build.js` file.
+
+To do this, just run:
+```
+npm install -g browserify
+browserify ./build.js -o ./dist/karkas.js -d
+```
+
 ## JSDoc
 Original non-compiled sources have embedded JSDoc markup, that allows to read documentation in your IDE.
 
