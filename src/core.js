@@ -53,6 +53,13 @@ module.exports = function() {
         if(typeof self.views[vId] == "undefined") throw new ReferenceError("KarkasJS: Requested template is not defined: '"+vId+"'");
         return self.views[vId];
     };
+
+    this.clear = function() {
+        for(var i in self.views) {
+            delete this.views[i];
+        }
+    };
+    
     this.exists = function(templateName) {
         return def(this.views[templateName]);
     };
