@@ -42,11 +42,37 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='template/karkas' name='calcDemo'>
+                    <script type='text/karkas' name='calcDemo'>
                             {{'Hello ' + 'World'}} <br />
                             2+2 = {{2+2}}
                     </script>
-                    <code id="calculationsResult">
+                    <code id="calculationsResult" data-compile="{}" data-view="calcDemo">
+                    </code>
+                </div>
+            </div>
+        </div>
+        <div class="box-block">
+            <h1>
+                Attribute parsing
+                <small>You can specify template name and JSON data in DIV to compile it quickly.</small>
+            </h1>
+            <br />
+            <div class="row">
+                <div class="col-md-8">
+                    <p class="subtitle">Code:</p>
+                    <code>
+                        &lt;code data-compile='{"name":"Lorem","surname":"Ipsum"}' data-view="inlineCompilationDemo"&gt;
+                        <br />
+                        &lt;!-- empty --&gt;<br />
+                        &lt;/code&gt;
+                    </code>
+                </div>
+                <div class="col-md-4">
+                    <p class="subtitle">Result:</p>
+                    <script type='text/karkas' name='inlineCompilationDemo'>
+                            {{name}} {{surname}}
+                    </script>
+                    <code data-compile='{"name":"Lorem","surname":"Ipsum"}' data-view="inlineCompilationDemo">
                     </code>
                 </div>
             </div>
@@ -69,7 +95,7 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='template/karkas' name='filtersDemo'>
+                    <script type='text/karkas' name='filtersDemo'>
                             Price :{{price|currency:'&euro;'}} <br />
                             Original JSON: <br />
                             {{this|json}}
@@ -90,14 +116,14 @@
                 <div class="col-md-8">
                     <p class="subtitle">Code:</p>
                     <pre style='height:240px;'>
-&lt;script type='template/karkas' name='listBox'&gt;
+&lt;script type='text/karkas' name='listBox'&gt;
    &lt;b&gt;{{title}}&lt;/b&gt;
    &lt;ul&gt;
      {{items|listBoxItem}}
    &lt;/ul&gt;
 &lt;/script&gt;
 
-&lt;script type='template/karkas' name='listBoxItem'&gt;
+&lt;script type='text/karkas' name='listBoxItem'&gt;
   &lt;li&gt;
    &lt;label&gt;
        &lt;input type="checkbox" id="item_{{id}}" /&gt;
@@ -142,14 +168,14 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='template/karkas' name='listBox'>
+                    <script type='text/karkas' name='listBox'>
                        <b>{{title}}</b>
                        <ul>
                          {{items|listBoxItem}}
                        </ul>
                     </script>
 
-                    <script type='template/karkas' name='listBoxItem'>
+                    <script type='text/karkas' name='listBoxItem'>
                        <li>
                         <label>
                            <input type="checkbox" id="item_{{id}}" />
@@ -178,7 +204,7 @@
         </div>
         <br /><br />
     </div>
-    <script type="template/karkas" name="image-frame">
+    <script type="text/karkas" name="image-frame">
         <img src="{{this}}" class="img-responsive img-rounded" />
     </script>
     <!-- 1. define a template inside html -->
@@ -187,7 +213,7 @@
     <!-- and currency filter for price -->
     <!-- For picture output we will use `image-frame` template -->
     
-    <script type="template/karkas" name="listTemplate">
+    <script type="text/karkas" name="listTemplate">
     	<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
     		<div class="thumbnail grid-blk">
     			{{img|image-frame}}
@@ -207,7 +233,7 @@
     </script>
 
     <!-- 2. Connect a KarkasJS -->
-    <script type="text/javascript" src="../karkas.min.js"></script>
+    <script type="text/javascript" src="../dist/karkas.js"></script>
 
 
     <script type="text/javascript">
@@ -259,12 +285,11 @@
     //  Args:
     // templateName, data (Array or Object), html element / string [optional], overwrite content [optional]
     document.addEventListener('DOMContentLoaded', function() {
-        
-        karkas.compile("listTemplate",data,"#container",true);
-        
+        document.querySelector('#container').innerHTML = karkas.compile("listTemplate",data);
+
         // Demos
-        karkas.compile('calcDemo',{},'#calculationsResult');
-        karkas.compile('filtersDemo',{price: 13800.183},'#filtersResult');
+//        document.querySelector('#calculationsResult').innerHTML = karkas.compile('calcDemo',{});
+        document.querySelector('#filtersResult').innerHTML = karkas.compile('filtersDemo',{price: 13800.183});
         
         // List Box Demo
         var listBoxes = [
@@ -296,13 +321,13 @@
        }
    ];
 
-       karkas.compile('listBox', listBoxes, '#listBoxDemo');
+       document.querySelector('#listBoxDemo').innerHTML += karkas.compile('listBox', listBoxes);
     });
 
 
     // 5. Load more items and draw it
     function loadMoreItems(){
-        karkas.compile("listTemplate",data,"#container");
+        document.querySelector('#container').innerHTML += karkas.compile("listTemplate",data);
     }
 
 
