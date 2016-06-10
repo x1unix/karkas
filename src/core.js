@@ -18,7 +18,7 @@ module.exports = function() {
         'major': 2,
         'minor': 0,
         'patch': 0,
-        'build': 4,
+        'build': 6,
         'toString': function() {
             with(this) {
                 return[major, minor, patch].join('.');
@@ -59,7 +59,7 @@ module.exports = function() {
             delete this.views[i];
         }
     };
-    
+
     this.exists = function(templateName) {
         return def(this.views[templateName]);
     };
