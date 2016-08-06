@@ -82,23 +82,21 @@ module.exports = function(karkas) {
      * @param templateName {String} Template name
      * @param successCallback {Function} onSuccess callback
      */
-    this.include = function(url, templateName, successCallback) {
-
-        function finish(onSuccess, response) {
-            // Create new template and push it to Karkas
-            (new karkas.View(templateName, response)).apply();
-
-            // Call callback
-            onSuccess(response);
-        }
-
+    karkas.include = function(url, templateName, successCallback) {
 
         function makeRequest(onSuccess, onError) {
             var xhr = new XMLHttpRequest();
+
+            onError = onError || function(e) { console.error(e);};
+
             xhr.open("GET", url);
             xhr.onload = function () {
                 if (this.status >= 200 && this.status < 300) {
-                    finish(onSuccess, xhr.response);
+
+                    var template = new karkas.View(templateName, xhr.response);
+                    template.apply();
+
+                    onSuccess(template, xhr.response);
                 } else {
                     onError({
                         status: this.status,
@@ -123,34 +121,11 @@ module.exports = function(karkas) {
             xhr.send();
         }
 
-        function importFromDom(onSuccess) {
-            var e = document.querySelector('script[type="'+VIEW_SCRIPT_MIME_TYPE+'"]#'+url);
-            var eIsNull = nul(e);
-            if ( !eIsNull ) {
-                finish(onSuccess, e.innerHTML);
-            }
-            return eIsNull;
-        }
-
-        function tryImport(onSuccess, onError) {
-
-            // Try to get element from DOM
-            if( !importFromDom(onSuccess) ) {
-
-                // If not - download it.
-                makeRequest(onSuccess, onError);
-            }
-        }
-
-
-
         if( typeof url !== 'string' ) throw new ReferenceError('Karkas: Url is not a String');
         templateName = templateName || url;
-        if( (typeof successCallback == 'function') || (typeof window.Promise == 'undefined') ) return tryImport(successCallback);
+        if( (typeof successCallback == 'function') || !('Promise' in window) ) return makeRequest(successCallback);
 
-        return new Promise(function (resolve, reject) {
-            tryImport(resolve, reject);
-        });
+        return new Promise(makeRequest);
     };
 
     document.addEventListener('DOMContentLoaded', karkas.refresh);
