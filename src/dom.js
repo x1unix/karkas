@@ -9,8 +9,9 @@
 
 module.exports = function(karkas) {
     function def(e) { return typeof e !== 'undefined'; }
-    function nul(e) { return e === null };
+    function nul(e) { return e === null }
 
+    if( !def(window) ) throw new ReferenceError('Karkas DOM extensions requries browser');
     if( !def(window.document) ) throw new Error('Karkas DOM extensions requires a document object');
 
     var $d = window.document;

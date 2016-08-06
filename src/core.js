@@ -6,7 +6,7 @@
  * @version 3.0.0-b4
  * @author Denis Sedchenko
  */
-module.exports = function() {
+var Karkas = function() {
 
     function def(el) {
         return typeof el != 'undefined';
@@ -15,10 +15,10 @@ module.exports = function() {
     var self = this;
 
     this.version = {
-        'major': 2,
+        'major': 3,
         'minor': 0,
         'patch': 0,
-        'build': 6,
+        'build': 7,
         'toString': function() {
             with(this) {
                 return[major, minor, patch].join('.');
@@ -116,4 +116,8 @@ module.exports = function() {
     };
 
 
+};
+
+module.exports = function() {
+    return new Karkas();
 };

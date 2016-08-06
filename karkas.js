@@ -12,8 +12,8 @@
  * @param useDomExtensions bool Include DOM extension
  * @returns {*}
  */
-module.exports = function(useDomExtensions) {
-   var karkas = new (require('./src/core.js'))();
-    if(useDomExtensions) require('./src/dom.js')(karkas);
+module.exports = function(useDom) {
+   var karkas = require('./src/core.js')();
+    if( useDom ) require('./src/dom.js')(karkas);
     return karkas;
 };
