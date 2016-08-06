@@ -77,19 +77,28 @@ module.exports = function(karkas) {
     };
 
     /**
-     * Load templates from remote URL
-     * @param url URL
-     * @param successCallback onSuccess callback
+     * Import content as template from remote URL
+     * @param url {String} URL Path
+     * @param templateName {String} Template name
+     * @param successCallback {Function} onSuccess callback
      */
-    this.include = function(url, successCallback) {
+    this.include = function(url, templateName, successCallback) {
+
+        function finish(onSuccess, response) {
+            // Create new template and push it to Karkas
+            (new karkas.View(templateName, response)).apply();
+
+            // Call callback
+            onSuccess(response);
+        }
+
+
         function makeRequest(onSuccess, onError) {
             var xhr = new XMLHttpRequest();
             xhr.open("GET", url);
             xhr.onload = function () {
                 if (this.status >= 200 && this.status < 300) {
-                    $b.innerHTML += xhr.response;
-                    karkas.refresh();
-                    onSuccess(xhr.response);
+                    finish(onSuccess, xhr.response);
                 } else {
                     onError({
                         status: this.status,
@@ -98,18 +107,49 @@ module.exports = function(karkas) {
                 }
             };
             xhr.onerror = function () {
-                onError({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
+                if ( def(onError) ) {
+                    onError({
+                        status: this.status,
+                        statusText: xhr.statusText
+                    });
+                } else {
+                    console.error('Karkas: Failed to import remote template: ',{
+                        status: this.status,
+                        statusText: xhr.statusText
+                    });
+                }
+
             };
             xhr.send();
         }
 
-        if( (typeof successCallback == 'function') || (typeof window.Promise == 'undefined') ) return makeRequest(successCallback);
+        function importFromDom(onSuccess) {
+            var e = document.querySelector('script[type="'+VIEW_SCRIPT_MIME_TYPE+'"]#'+url);
+            var eIsNull = nul(e);
+            if ( !eIsNull ) {
+                finish(onSuccess, e.innerHTML);
+            }
+            return eIsNull;
+        }
+
+        function tryImport(onSuccess, onError) {
+
+            // Try to get element from DOM
+            if( !importFromDom(onSuccess) ) {
+
+                // If not - download it.
+                makeRequest(onSuccess, onError);
+            }
+        }
+
+
+
+        if( typeof url !== 'string' ) throw new ReferenceError('Karkas: Url is not a String');
+        templateName = templateName || url;
+        if( (typeof successCallback == 'function') || (typeof window.Promise == 'undefined') ) return tryImport(successCallback);
 
         return new Promise(function (resolve, reject) {
-            makeRequest(resolve, reject);
+            tryImport(resolve, reject);
         });
     };
 
