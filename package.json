@@ -1,0 +1,32 @@
+{
+  "name": "karkas",
+  "version": "3.0.0",
+  "description": "Handlebars-based template engine inspired by Angular.",
+  "main": "karkas.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/odin3/karkas.git"
+  },
+  "keywords": [
+    "handlebars",
+    "moustache",
+    "karkas",
+    "karkasjs",
+    "template",
+    "engine",
+    "ejs",
+    "jade"
+  ],
+  "author": "Denis Sedchenko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/odin3/karkas/issues"
+  },
+  "homepage": "https://github.com/odin3/karkas#readme"
+}

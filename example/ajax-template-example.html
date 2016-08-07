@@ -36,10 +36,12 @@
 
 
     <!-- 1. Connect a KarkasJS -->
-    <script type="text/javascript" src="../karkas.js"></script>
+    <script type="text/javascript" src="../dist/karkas.js"></script>
 
 
     <script type="text/javascript">
+    var container = document.querySelector('#container');
+
     // Container with data
     var data = [
     	{
@@ -66,8 +68,9 @@
 
     // 4. Get templates from url and parse posts using them
     document.addEventListener('DOMContentLoaded', function() {
-        karkas.include("template.html").then(function(){
-            karkas.compile("listTemplate",data,"#container",true);
+        karkas.include("template.html", 'listTemplate').then(function(){
+            console.log('loaded');
+            container.innerHTML += karkas.compile("listTemplate",data);
         }).catch(function (err) {
             console.error('Augh, there was an error!', err.statusText);
         });
@@ -76,7 +79,7 @@
 
     // 5. Load more items and draw it
     function loadMoreItems(){
-        karkas.compile("listTemplate",data,"#container");
+        container.innerHTML += karkas.compile("listTemplate",data);
     }
 
 
