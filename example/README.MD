@@ -13,7 +13,7 @@ To define a new template, create a new **template** tag. This block can be place
 Also you have to give a name for template with **name** attribute, for example:
 
 ```
-<script type="template/karkas" name="myFirstTemplate">
+<script type="text/karkas" name="myFirstTemplate">
 </script>
 ```
 
@@ -24,10 +24,6 @@ var template = new karkas.View('<b>Name:</b> {{name}}', 'myTemplate');
 
 // Register template
 template.apply();
-```
-Or use existing HTML element:
-```
-var tpl = new karkas.View(document.querySelector('.item'), 'myTemplate');
 ```
 
 ### 3. Add content and variables
@@ -76,18 +72,13 @@ You can directly compile data using **karkas.compile**.
 It will return a compiled HTML as string, but also it allows to output result directly to HTML elements.
 You can use it to parse an array of objects or a single object.
 
-Parse an array of objects directly to DIV:
+Parse an array of objects or single object:
 
 ```
-karkas.compile("myTemplate",arrayOfObjects,"#container",true);
-```
-The last parameter, allows to you overwrite or append result to HTML tag.
+var element = document.querySelector('.content'),
+    compiled = karkas.compile("myTemplate",arrayOfObjects);
 
-
-Just parse a single object and return data to variable:
-
-```
-var compiledHTML = karkas.compile("myTemplate",singleObject);
+element.innerHTML += compiled;
 ```
 
 Also you can store all templates in separate file (see **Including remote templates**).
@@ -160,7 +151,7 @@ To do it, just use the same syntax as for filters, but type template name instea
 
 ```
 <!-- image template -->
-<script type="template/karkas" name="image-template">
+<script type="text/karkas" name="image-template">
     <div class="img-responsive">
         <img src="{{image}}" alt="{{title}}" />
     </div>
@@ -168,7 +159,7 @@ To do it, just use the same syntax as for filters, but type template name instea
 
 
 <!-- here is post template, here we will use image-template inside it to parse image -->
-<script type="template/karkas" name="post">
+<script type="text/karkas" name="post">
     <article class="post">
         <section>{{title}}</section>
         
@@ -182,7 +173,7 @@ To do it, just use the same syntax as for filters, but type template name instea
 
 ```
 
-### 6. Store templates in separate files
+### 6. Import templates from URL
 Karkas allows to you to save your templates in files, and include them on demand using AJAX.
 Example of including templates is available in **ajax-template-example.html** file and require an HTTP server.
 
@@ -190,7 +181,7 @@ A simple example of including a template and parsing data using it:
 
 **index.html (with Promise support):**
 ```
-karkas.include("template.html").then(function(){
+karkas.include("template.html", "listTemplate").then(function(){
     karkas.compile("listTemplate",data,"#container",true);
 }).catch(function (err) {
     console.error('Augh, there was an error!', err.statusText);
@@ -199,20 +190,16 @@ karkas.include("template.html").then(function(){
 
 **index.html (Regular callback):**
 ```
-karkas.include("template.html", function(){
+karkas.include("template.html", "listTemplate", function(){
     karkas.compile("listTemplate",data,"#container",true);
 });
 ```
 
 **template.html**
 ```
-<script type="template/karkas" name="listTemplate">
-{{data}}
-</script>
-
-<!--this file can contain a multiple templates-->
-<script type="template/karkas" name="menuTemplate">
-{{data}}
-</script>
+<b>Data:</b>
+<div>
+  {{data}}
+</div>
 
 ```
