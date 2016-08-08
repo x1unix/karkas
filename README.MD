@@ -7,7 +7,7 @@ A powerfull template engine for JavaScript inspired by AngularJS.
 ## About
 Karkas allows to you to parse and filter JSON objects or arrays directly as HTML assets to your web application.
 
-**Warning!** This is developent version of library. If you want to use stable version, use `master` branch.
+**Attention!** This version isn't compatible with previous major versions of library. To get previous version, checkout `2.x` branch. 
 
 
 ## Compatibility
