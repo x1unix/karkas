@@ -22,11 +22,11 @@ Full support of Chrome, Firefox, Internet Explorer 9+.
 **Front-end**:
 You can install Karkas with **Bower** package manager - `bower install karkas` or just download the source code from this repo.
 
-**Node**
+**Node:**
 Just run `npm install karkas` and connect it as node module.
 
 ## Build Library
-This packkage already contains builded .js file, but you can
+This package already contains builded .js file, but you can
 modify it and build your own package.
 
 To build Karkas for usage in front-end as standalone library,
