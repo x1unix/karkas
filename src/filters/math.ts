@@ -9,7 +9,7 @@
  * @author Denis Sedchenko
  */
 
-module.exports = function($value, $operation) {
+export function mathFilter($value: number, $operation: string) {
     try {
         [].splice.apply(arguments,[1,1]);
         return Math[$operation].apply(Math,arguments);

@@ -3,10 +3,10 @@
  * Licensed by MIT license
  *
  * @package karkas.filters.toUpper
- * @version 3.0.0-b1
+ * @version 4.0.0
  * @author Denis Sedchenko
  */
 
-module.exports = function(val) {
+export function toUpperFilter(val: string) {
     return String(val).toUpperCase();
 };

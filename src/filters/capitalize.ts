@@ -3,11 +3,11 @@
  * Licensed by MIT license
  *
  * @package karkas.filters.capitalize
- * @version 3.0.0-b1
+ * @version 4.0.0
  * @author Denis Sedchenko
  */
 
-module.exports = function(val) {
+export function capitalizeFilter(val: string) {
     val = String(val);
     return val.substring(0,1).toUpperCase()+val.substring(1);
 };

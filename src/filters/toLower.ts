@@ -7,6 +7,6 @@
  * @author Denis Sedchenko
  */
 
-module.exports = function(val) {
+export function toLowerFilter(val: string) {
     return String(val).toLowerCase();
 };

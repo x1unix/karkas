@@ -1,48 +1,56 @@
-# Karkas.js
+# Typescript Webpack Starter
+[![Build Status](https://travis-ci.org/emyann/typescript-webpack-starter.svg?branch=develop)](https://travis-ci.org/emyann/typescript-webpack-starter)
+>A damn simple ES6 and Typescript Starter kit using webpack for packaging. Perfect for bootstraping your javascript project regardless any framework.
 
-**Version: 3.0.0**
+## Built upon
 
-A powerfull template engine for JavaScript inspired by AngularJS.
+- [x] [Webpack 3](https://webpack.js.org/)
+- [x] [Typescript 2](https://blogs.msdn.microsoft.com/typescript/2016/07/11/announcing-typescript-2-0-beta/)
+- [x] [Webpack Dashboard](https://github.com/FormidableLabs/webpack-dashboard)
+![Imgur](http://i.imgur.com/pETTX85.png)
 
-## About
-Karkas allows to you to parse and filter JSON objects or arrays directly as HTML assets to your web application.
+# Getting started
 
-**Attention!** This version isn't compatible with previous major versions of library. To get previous version, checkout `2.x` branch. 
+## Clone Typescript Webpack Starter
 
-
-## Compatibility
-This library was written in ES5 but compatible with ES4.
-
-Karkas is independent **node.js** module and can be used as part of node application.
-Also it can be used on front-end using **Browserify**.
-
-Full support of Chrome, Firefox, Internet Explorer 9+.
-
-## Installation
-**Front-end**:
-You can install Karkas with **Bower** package manager - `bower install karkas` or just download the source code from this repo.
-
-**Node:**
-Just run `npm install karkas` and connect it as node module.
-
-## Build Library
-This package already contains builded .js file, but you can
-modify it and build your own package.
-
-To build Karkas for usage in front-end as standalone library,
-you have to install **Browserify** and compile `build.js` file.
-
-To do this, just run:
-```
-npm install -g browserify
-browserify ./build.js -o ./dist/karkas.js -d
+```bash
+git clone https://github.com/emyann/typescript-webpack-starter.git
+cd typescript-webpack-starter
+# Install the dependencies
+npm install
 ```
 
-## JSDoc
-Original non-compiled sources have embedded JSDoc markup, that allows to read documentation in your IDE.
+## Run
 
-## Tutorial
+Start a Webpack dev server 
+```bash
+npm start
+```
+And go to this URL: `http://localhost:3000` - 🎉
 
-Tutorial is included in **example** folder.
+Start a Webpack server with the production configuration 
+```bash
+npm run server:prod
+```
 
 
+## Build Only
+Build a development release
+```bash
+npm run build
+```
+
+
+Build a production release
+```bash
+npm run build:prod
+```
+After build phase, 3 files are generated into the `dist` folder:
+- `app.bundle.js` - contains the core of the application. From the entry point `src/index.ts`
+- `vendor.bundle.js` - contains the vendor dependencies
+- `index.html` - html page with references to the 2 files above
+
+## TODO
+
+- [ ] Setup a webpack common configuration and use webpack-merge
+- [ ] `create-ts-app` or `create-typescript-app` CLI instead of cloning the entire repository

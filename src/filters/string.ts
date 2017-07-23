@@ -9,7 +9,7 @@
  * @author Denis Sedchenko
  */
 
-module.exports = function($value, $operation) {
+export function stringFilter($value: string, $operation: string) {
     try {
         var $args = [].splice.apply(arguments,[2]);
         return ""[$operation].apply($value,$args);

@@ -9,7 +9,7 @@
  * @author Denis Sedchenko
  */
 
-module.exports = function(val) {
+export function jsonFilter(val: any) {
     try {
         return JSON.stringify(val);
     } catch(ex) {
