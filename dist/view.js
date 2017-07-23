@@ -76,7 +76,6 @@ var View = (function () {
         }
         return sReturn;
     };
-    ;
     /**
      * Parse an array of objects using the template
      * @param arr
@@ -86,7 +85,6 @@ var View = (function () {
         var _this = this;
         return arr.map(function (i) { return _this.parse(i); }).join();
     };
-    ;
     return View;
 }());
 exports.View = View;

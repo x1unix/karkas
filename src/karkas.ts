@@ -47,7 +47,7 @@
    * @memberof Karkas
    */
   public getView(templateName: string): View {
-    if (this.views.has(templateName)) {
+    if (!this.views.has(templateName)) {
       throw new ReferenceError(`Karkas: View '${templateName}' is not defined`);
     }
 
@@ -62,7 +62,7 @@
    * @memberof Karkas
    */
   public getFilter(filterName: string): Function {
-    if (this.filters.has(filterName)) {
+    if (!this.filters.has(filterName)) {
       throw new ReferenceError(`Karkas: Filter '${filterName}' is not defined`);
     }
 
@@ -80,7 +80,7 @@
   public filter(filterQuery: string, value: any): string {
     // Extract filter name and args
     const query = filterQuery.trim().split(":");
-    var filterName = filterQuery[0];
+    var filterName = query[0];
 
     // Array of arguments that we will push to the filter
     // At start there will be only expression value
@@ -88,17 +88,17 @@
 
     // Try to find another args
     if (query.length > 1) {
-        const filterArgs = (new Function(`return [${filterQuery[1].trim()}]`))();
+        const filterArgs = (new Function(`return [${query[1].trim()}]`))();
         value = value.concat(filterArgs);
     }
 
-    if (this.filters.has(filterName)) {
+    if (!this.filters.has(filterName)) {
       throw new ReferenceError(`Karkas: filter '${filterName}' is not defined`);
     }
 
     try {
       // Find and call the filter with selected args
-      var filter = this.filters.get(filterName);
+      const filter = this.filters.get(filterName);
       return filter.apply(filter, value);
     } catch(ex) {
       throw new Error(`Karkas: failed to apply filter '${filterName}', reason: ${ex.message}`);

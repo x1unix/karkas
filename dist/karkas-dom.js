@@ -55,6 +55,8 @@ var KarkasDOM = (function (_super) {
         }
     };
     KarkasDOM.prototype.refresh = function (refreshItems) {
+        if (refreshItems === void 0) { refreshItems = true; }
+        console.log('refreshing...');
         // Views container
         if (refreshItems)
             this.dispose();

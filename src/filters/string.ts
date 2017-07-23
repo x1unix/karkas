@@ -5,15 +5,14 @@
  * String filter
  *
  * @package karkas.filters.string
- * @version 3.0.0-b1
+ * @version 4.0.0
  * @author Denis Sedchenko
  */
 
-export function stringFilter($value: string, $operation: string) {
-    try {
-        var $args = [].splice.apply(arguments,[2]);
-        return ""[$operation].apply($value,$args);
-    } catch(ex) {
-        throw new Error("Failed to perform method `String."+$operation+"` ("+ex.message+")");
-    }
+export function stringFilter(value: string, operation: string, ...args: any[]) {
+  try {
+      return String.prototype[operation].apply(value, args);
+  } catch(ex) {
+      throw new Error(`Failed to perform method 'String.${operation}' (${ex.message})`);
+  }
 };

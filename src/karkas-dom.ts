@@ -27,7 +27,7 @@ export class KarkasDOM extends Karkas {
     if (!def(window)) throw new ReferenceError('Karkas DOM extensions requries browser');
     if (!def(window.document)) throw new Error('Karkas DOM extensions requires a document object');
 
-    document.addEventListener('DOMContentLoaded', () => this.refresh);
+    document.addEventListener('DOMContentLoaded', () => this.refresh());
   }
 
   public onFind() { }
@@ -53,7 +53,7 @@ export class KarkasDOM extends Karkas {
     }
   }
 
-  public refresh(refreshItems: boolean) {
+  public refresh(refreshItems: boolean = true) {
     // Views container
     if (refreshItems) this.dispose();
 

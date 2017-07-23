@@ -9,6 +9,7 @@
 
 import { Karkas } from './karkas';
 import { KarkasDOM } from './karkas-dom';
+import { injectDefaultFilters } from './filters';
 
 
 /**
@@ -29,6 +30,9 @@ const getInstance = (): Karkas => {
   } else {
     instance = new Karkas();
   }
+
+  // Add default filters
+  injectDefaultFilters(instance);
 
   return instance;
 }

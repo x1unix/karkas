@@ -11,6 +11,6 @@ export declare class KarkasDOM extends Karkas {
     constructor();
     onFind(): void;
     private compileElement(element);
-    refresh(refreshItems: boolean): boolean;
+    refresh(refreshItems?: boolean): boolean;
     include(url: string, templateName: string, successCallback?: Function): Promise<string> | void;
 }

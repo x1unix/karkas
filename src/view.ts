@@ -17,7 +17,7 @@ const valueParserFactory = (expressionName: string): Function => {
 
 const t = (v: any, t: string) => typeof v === t;
 
-const def = (val: any) => t(val, 'undefined');
+const def = (val: any) => !t(val, 'undefined');
 
 export class View {
 
@@ -82,15 +82,18 @@ export class View {
             // If value is undefined - replace it
             if( !def(newVal) ) newVal = '';
 
+
             // Use filter or template if available in expression
-            if( def(filter))  newVal = this.handler[this.handler.views.has(filter) ? 'compile' : 'filter'](filter, newVal);
+            if( def(filter)) {
+              newVal = this.handler[this.handler.views.has(filter) ? 'compile' : 'filter'](filter, newVal);
+            }
 
             sReturn = sReturn.replace(currentField,newVal);
           }
       }
 
       return sReturn;
-  };
+  }
 
 
   /**
@@ -99,7 +102,7 @@ export class View {
    * @returns {string} Compiled content
    */
   public parseArray(arr: Array<any>): string {
-      return arr.map((i) => this.parse(i)).join();
-  };
+      return arr.map((i) => this.parse(i)).join('');
+  }
 
 }

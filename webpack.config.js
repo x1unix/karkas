@@ -7,10 +7,10 @@ var config = {
   devtool: isProd ? "hidden-source-map" : "source-map",
   context: path.resolve("./src"),
   entry: {
-    app: "./index.ts"
+    karkas: "./index.ts"
   },
   output: {
-    path: path.resolve("./"),
+    path: path.resolve("./dist"),
     filename: "[name].min.js",
     sourceMapFilename: "[name].min.map",
     devtoolModuleFilenameTemplate: function (info) {

@@ -48,7 +48,7 @@ var Karkas = (function () {
      * @memberof Karkas
      */
     Karkas.prototype.getView = function (templateName) {
-        if (this.views.has(templateName)) {
+        if (!this.views.has(templateName)) {
             throw new ReferenceError("Karkas: View '" + templateName + "' is not defined");
         }
         return this.views.get(templateName);
@@ -61,7 +61,7 @@ var Karkas = (function () {
      * @memberof Karkas
      */
     Karkas.prototype.getFilter = function (filterName) {
-        if (this.filters.has(filterName)) {
+        if (!this.filters.has(filterName)) {
             throw new ReferenceError("Karkas: Filter '" + filterName + "' is not defined");
         }
         return this.filters.get(filterName);
