@@ -9,11 +9,10 @@
  * @author Denis Sedchenko
  */
 
-export function arrayFilter($value: Array<any>, $operation: string) {
+export function arrayFilter(value: Array<any>, operation: string, ...args: any[]) {
     try {
-        var $args = [].splice.apply(arguments,[2]);
-        return ([])[$operation].apply($value,$args);
-    } catch(ex) {
-        throw new Error("Failed to perform method `Array."+$operation+"` ("+ex.message+")");
+        return ([])[operation].apply(value, args);
+    } catch (ex) {
+        throw new Error("Failed to perform method `Array." + operation + "` (" + ex.message + ")");
     }
 };
