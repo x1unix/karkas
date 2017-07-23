@@ -12,7 +12,7 @@
 export function stringFilter(value: string, operation: string, ...args: any[]) {
   try {
       return String.prototype[operation].apply(value, args);
-  } catch(ex) {
+  } catch (ex) {
       throw new Error(`Failed to perform method 'String.${operation}' (${ex.message})`);
   }
 };
