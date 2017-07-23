@@ -7,13 +7,12 @@ var config = {
   devtool: isProd ? "hidden-source-map" : "source-map",
   context: path.resolve("./src"),
   entry: {
-    app: "./index.ts",
-    vendor: "./vendor.ts"
+    app: "./index.ts"
   },
   output: {
-    path: path.resolve("./dist"),
-    filename: "[name].js",
-    sourceMapFilename: "[name].map",
+    path: path.resolve("./"),
+    filename: "[name].min.js",
+    sourceMapFilename: "[name].min.map",
     devtoolModuleFilenameTemplate: function (info) {
         return "file:///" + info.absoluteResourcePath;
     }
@@ -29,7 +28,7 @@ var config = {
     ]
   },
   resolve: {
-    extensions: [".ts", ".js"]
+    extensions: [".ts"]
   },
   plugins: [
     new webpack.DefinePlugin({

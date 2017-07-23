@@ -38,15 +38,13 @@ export { toUpperFilter } from './toUpper';
  * @param {Karkas} karkasInstance
  */
 export function injectDefaultFilters(karkasInstance: Karkas) {
-    karkasInstance
-       .addFilter('currency', currencyFilter)
-       .addFilter('string', stringFilter)
-       .addFilter('array', arrayFilter)
-       .addFilter('math', mathFilter)
-       .addFilter('json', jsonFilter)
-       .addFilter('capitalize', capitalizeFilter)
-       .addFilter('toLower', toLowerFilter)
-       .addFilter('toUpper', toUpperFilter);
-    }
-
+  karkasInstance
+      .addFilter('currency', currencyFilter)
+      .addFilter('string', stringFilter)
+      .addFilter('array', arrayFilter)
+      .addFilter('math', mathFilter)
+      .addFilter('json', jsonFilter)
+      .addFilter('capitalize', capitalizeFilter)
+      .addFilter('toLower', toLowerFilter)
+      .addFilter('toUpper', toUpperFilter);
 };
