@@ -10,6 +10,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var karkas_1 = require("./karkas");
 var karkas_dom_1 = require("./karkas-dom");
+var filters_1 = require("./filters");
 /**
  * Export suitable karkas version (DOM or common)
  */
@@ -27,6 +28,8 @@ var getInstance = function () {
     else {
         instance = new karkas_1.Karkas();
     }
+    // Add default filters
+    filters_1.injectDefaultFilters(instance);
     return instance;
 };
 var karkas = getInstance();

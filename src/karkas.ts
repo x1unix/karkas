@@ -80,7 +80,7 @@
   public filter(filterQuery: string, value: any): string {
     // Extract filter name and args
     const query = filterQuery.trim().split(":");
-    var filterName = query[0];
+    let filterName = query[0];
 
     // Array of arguments that we will push to the filter
     // At start there will be only expression value
@@ -100,7 +100,7 @@
       // Find and call the filter with selected args
       const filter = this.filters.get(filterName);
       return filter.apply(filter, value);
-    } catch(ex) {
+    } catch (ex) {
       throw new Error(`Karkas: failed to apply filter '${filterName}', reason: ${ex.message}`);
     }
   }

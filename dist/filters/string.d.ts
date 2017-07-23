@@ -5,7 +5,7 @@
  * String filter
  *
  * @package karkas.filters.string
- * @version 3.0.0-b1
+ * @version 4.0.0
  * @author Denis Sedchenko
  */
-export declare function stringFilter($value: string, $operation: string): any;
+export declare function stringFilter(value: string, operation: string, ...args: any[]): any;

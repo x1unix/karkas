@@ -13,7 +13,7 @@ var valueParserFactory = function (expressionName) {
     return new Function("with(this) { return " + expressionName + "; }");
 };
 var t = function (v, t) { return typeof v === t; };
-var def = function (val) { return t(val, 'undefined'); };
+var def = function (val) { return !t(val, 'undefined'); };
 var View = (function () {
     function View(handler, name, content) {
         if (content === void 0) { content = null; }
@@ -69,8 +69,9 @@ var View = (function () {
                 if (!def(newVal))
                     newVal = '';
                 // Use filter or template if available in expression
-                if (def(filter))
+                if (def(filter)) {
                     newVal = this.handler[this.handler.views.has(filter) ? 'compile' : 'filter'](filter, newVal);
+                }
                 sReturn = sReturn.replace(currentField, newVal);
             }
         }
@@ -83,7 +84,7 @@ var View = (function () {
      */
     View.prototype.parseArray = function (arr) {
         var _this = this;
-        return arr.map(function (i) { return _this.parse(i); }).join();
+        return arr.map(function (i) { return _this.parse(i); }).join('');
     };
     return View;
 }());

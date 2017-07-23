@@ -31,7 +31,7 @@ var KarkasDOM = (function (_super) {
             throw new ReferenceError('Karkas DOM extensions requries browser');
         if (!def(window.document))
             throw new Error('Karkas DOM extensions requires a document object');
-        document.addEventListener('DOMContentLoaded', function () { return _this.refresh; });
+        document.addEventListener('DOMContentLoaded', function () { return _this.refresh(); });
         return _this;
     }
     KarkasDOM.prototype.onFind = function () { };
@@ -56,7 +56,6 @@ var KarkasDOM = (function (_super) {
     };
     KarkasDOM.prototype.refresh = function (refreshItems) {
         if (refreshItems === void 0) { refreshItems = true; }
-        console.log('refreshing...');
         // Views container
         if (refreshItems)
             this.dispose();
@@ -76,7 +75,7 @@ var KarkasDOM = (function (_super) {
         for (var i = 0; i < requestedToParse.length; i++) {
             this.compileElement(requestedToParse[i]);
         }
-        if (typeof this.onFind == 'function') {
+        if (typeof this.onFind === 'function') {
             this.onFind();
         }
     };
@@ -119,7 +118,7 @@ var KarkasDOM = (function (_super) {
         if (typeof url !== 'string')
             throw new ReferenceError('Karkas: Url is not a String');
         templateName = templateName || url;
-        if ((typeof successCallback == 'function') || !('Promise' in window)) {
+        if ((typeof successCallback === 'function') || !('Promise' in window)) {
             return makeRequest(successCallback);
         }
         return new Promise(makeRequest);

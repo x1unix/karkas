@@ -6,17 +6,20 @@
  * String filter
  *
  * @package karkas.filters.string
- * @version 3.0.0-b1
+ * @version 4.0.0
  * @author Denis Sedchenko
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-function stringFilter($value, $operation) {
+function stringFilter(value, operation) {
+    var args = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        args[_i - 2] = arguments[_i];
+    }
     try {
-        var $args = [].splice.apply(arguments, [2]);
-        return ""[$operation].apply($value, $args);
+        return String.prototype[operation].apply(value, args);
     }
     catch (ex) {
-        throw new Error("Failed to perform method `String." + $operation + "` (" + ex.message + ")");
+        throw new Error("Failed to perform method 'String." + operation + "' (" + ex.message + ")");
     }
 }
 exports.stringFilter = stringFilter;

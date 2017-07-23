@@ -77,16 +77,16 @@ var Karkas = (function () {
     Karkas.prototype.filter = function (filterQuery, value) {
         // Extract filter name and args
         var query = filterQuery.trim().split(":");
-        var filterName = filterQuery[0];
+        var filterName = query[0];
         // Array of arguments that we will push to the filter
         // At start there will be only expression value
         value = [value];
         // Try to find another args
         if (query.length > 1) {
-            var filterArgs = (new Function("return [" + filterQuery[1].trim() + "]"))();
+            var filterArgs = (new Function("return [" + query[1].trim() + "]"))();
             value = value.concat(filterArgs);
         }
-        if (this.filters.has(filterName)) {
+        if (!this.filters.has(filterName)) {
             throw new ReferenceError("Karkas: filter '" + filterName + "' is not defined");
         }
         try {

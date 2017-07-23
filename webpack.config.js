@@ -12,7 +12,7 @@ var config = {
   output: {
     path: path.resolve("./dist"),
     filename: "[name].min.js",
-    sourceMapFilename: "[name].min.map",
+    sourceMapFilename: "[name].min.js.map",
     devtoolModuleFilenameTemplate: function (info) {
         return "file:///" + info.absoluteResourcePath;
     }

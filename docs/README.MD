@@ -20,14 +20,14 @@ Also you have to give a name for template with **name** attribute, for example:
 Also you can insert template as string by JavaScript API:
 ```
 // Create template instance
-var template = new karkas.View('<b>Name:</b> {{name}}', 'myTemplate');
+var template = karkas.createView('<b>Name:</b> {{name}}', 'myTemplate');
 
 // Register template
 template.apply();
 ```
 Or use existing HTML element:
 ```
-var tpl = new karkas.View(document.querySelector('.item'), 'myTemplate');
+var tpl = new karkas.createView(document.querySelector('.item'), 'myTemplate');
 ```
 
 ### 3. Add content and variables
@@ -57,7 +57,7 @@ For example, this array:
 			year:2014
 		}
 	}
-] 
+]
 
 ```
 
@@ -145,7 +145,7 @@ To create a new filter, you can use `karkas.filters.add` function.
 karkas.filters.add("myFilter", function(value, argument1, argument2) {
     // Check if first argument is defined
         if(typeof argument1 == "undefined") console.log("there is no argument1");
-        
+
     // return filtered value
         return value.toUpperCase();
     });
@@ -171,10 +171,10 @@ To do it, just use the same syntax as for filters, but type template name instea
 <script type="template/karkas" name="post">
     <article class="post">
         <section>{{title}}</section>
-        
+
         <!-- use object instance to parse image inside -->
         {{this|image-template}}
-        
+
         <p>{{text}}</p>
         <a href="{{link}}">Read</a>
     </article>

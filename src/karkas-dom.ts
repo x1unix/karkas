@@ -33,7 +33,7 @@ export class KarkasDOM extends Karkas {
   public onFind() { }
 
   private compileElement(element: Element | HTMLElement) {
-    var tempName = element.getAttribute(COMPILED_ELEMENT_TEMPLATE),
+    let tempName = element.getAttribute(COMPILED_ELEMENT_TEMPLATE),
       tempData = element.getAttribute(COMPILED_ELEMENT_DATA);
 
     if (nul(tempName)) throw new ReferenceError(COMPILED_ELEMENT_TEMPLATE + ' is undefined');
@@ -57,35 +57,35 @@ export class KarkasDOM extends Karkas {
     // Views container
     if (refreshItems) this.dispose();
 
-    var templateSelector = `script[type="${VIEW_SCRIPT_MIME_TYPE}"]`;
+    let templateSelector = `script[type="${VIEW_SCRIPT_MIME_TYPE}"]`;
 
     if (!refreshItems) templateSelector += ':not([data-loaded])';
 
     // Select all templates
-    var w = document.querySelectorAll(templateSelector);
+    let w = document.querySelectorAll(templateSelector);
 
     // Grep all elements
-    for (var c = 0; c < w.length; c++) {
+    for (let c = 0; c < w.length; c++) {
       this.createView(w[c].getAttribute("name"), w[c].innerHTML);
     }
 
     // find items by attr and parse them
-    var requestedToParse = document.querySelectorAll(COMPILED_ELEMENT_SELECTOR);
+    let requestedToParse = document.querySelectorAll(COMPILED_ELEMENT_SELECTOR);
 
     if (!requestedToParse.length) return true;
 
-    for (var i = 0; i < requestedToParse.length; i++) {
+    for (let i = 0; i < requestedToParse.length; i++) {
       this.compileElement(requestedToParse[i]);
     }
 
-    if (typeof this.onFind == 'function') {
+    if (typeof this.onFind === 'function') {
       this.onFind();
     }
   };
 
   public include(url: string, templateName: string, successCallback: Function = null): Promise<string> | void {
     function makeRequest(onSuccess: Function, onError: Function = DEF_ERR_CB) {
-      var xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest();
 
       xhr.open("GET", url);
       xhr.onload = () => {
@@ -121,7 +121,7 @@ export class KarkasDOM extends Karkas {
 
     templateName = templateName || url;
 
-    if ((typeof successCallback == 'function') || !('Promise' in window)) {
+    if ((typeof successCallback === 'function') || !('Promise' in window)) {
       return makeRequest(successCallback);
     }
 
