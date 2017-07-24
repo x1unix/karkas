@@ -82,6 +82,7 @@ var KarkasDOM = (function (_super) {
     ;
     KarkasDOM.prototype.include = function (url, templateName, successCallback) {
         if (successCallback === void 0) { successCallback = null; }
+        var self = this;
         function makeRequest(onSuccess, onError) {
             var _this = this;
             if (onError === void 0) { onError = DEF_ERR_CB; }
@@ -89,7 +90,7 @@ var KarkasDOM = (function (_super) {
             xhr.open("GET", url);
             xhr.onload = function () {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    var template = _this.createView(templateName, xhr.response);
+                    var template = self.createView(templateName, xhr.response);
                     onSuccess(template, xhr.response);
                 }
                 else {

@@ -84,13 +84,14 @@ export class KarkasDOM extends Karkas {
   };
 
   public include(url: string, templateName: string, successCallback: Function = null): Promise<string> | void {
+    const self = this;
     function makeRequest(onSuccess: Function, onError: Function = DEF_ERR_CB) {
       let xhr = new XMLHttpRequest();
 
       xhr.open("GET", url);
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          const template = this.createView(templateName, xhr.response);
+          const template = self.createView(templateName, xhr.response);
           onSuccess(template, xhr.response);
         } else {
           onError({
