@@ -70,7 +70,7 @@ var View = (function () {
                     newVal = '';
                 // Use filter or template if available in expression
                 if (def(filter)) {
-                    newVal = this.handler[this.handler.views.has(filter) ? 'compile' : 'filter'](filter, newVal);
+                    newVal = this.handler.filter(filter, newVal);
                 }
                 sReturn = sReturn.replace(currentField, newVal);
             }

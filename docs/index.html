@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -19,8 +19,10 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="index.html">Basic</a></li>
-            <li><a href="lazy-load.html">Template lazy load</a></li>
+            <li class="active"><a href="index.html">Demo</a></li>
+            <li><a href="docs.html">Get Started</a></li>
+            <li><a href="lazy-load.html">Lazy load</a></li>
+            <li><a href="filters.html">Filters</a></li>
             <li><a href="https://github.com/odin3/karkas" target="_blank">Source</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -120,7 +122,7 @@
 &lt;script type='text/karkas' name='listBox'&gt;
    &lt;b&gt;{{title}}&lt;/b&gt;
    &lt;ul&gt;
-     {{items|listBoxItem}}
+     {{items|template: "listBoxItem"}}
    &lt;/ul&gt;
 &lt;/script&gt;
 
@@ -172,7 +174,7 @@
                     <script type='text/karkas' name='listBox'>
                        <b>{{title}}</b>
                        <ul>
-                         {{items|listBoxItem}}
+                         {{items|template: "listBoxItem"}}
                        </ul>
                     </script>
 
@@ -217,7 +219,7 @@
     <script type="text/karkas" name="listTemplate">
     	<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
     		<div class="thumbnail grid-blk">
-    			{{img|image-frame}}
+    			{{img|template: "image-frame"}}
     			<div class="caption">
     				<h3>{{title|string:"toUpperCase"}}</h3>
                     <i>{{author.name|capitalize}} {{author.lastName|capitalize}}</i>

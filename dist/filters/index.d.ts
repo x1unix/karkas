@@ -17,6 +17,7 @@ export { mathFilter } from './math';
 export { stringFilter } from './string';
 export { toLowerFilter } from './toLower';
 export { toUpperFilter } from './toUpper';
+export { templateFilter } from './template';
 /**
  * Inject default filters to current Karkas instance
  *

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>KarkasJS Example</title>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <base href="https://odin3.github.io/karkas/" />
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Karkas.js</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Demo</a></li>
+            <li><a href="docs.html">Get Started</a></li>
+            <li><a href="lazy-load.html">Lazy load</a></li>
+            <li class="active"><a href="filters.html">Filters</a></li>
+            <li><a href="https://github.com/odin3/karkas" target="_blank">Source</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="container">
+    	<div class="row" id="container">
+        <h1>Filters</h1>
+
+          <p>
+            <h2>Usage</h2>
+            <p>You can filter values inside template using filters. To use filter for expression, add vertical line filter after object
+            field and filter name inside expression:</p>
+
+          <pre>
+&lt;script type="template/karkas" name="demo"&gt;
+    &lt;div class="item"&gt;
+        &lt;b&gt;{{name}}&lt;/b&gt;: &lt;span&gt;{{price|currency}}
+    &lt;/div&gt;
+&lt;/script&gt;
+</pre>
+
+          <p>
+            Some filters can have additional arguments, for example - <code>currency</code> filter has currency symbol as optional argument:
+          </p>
+
+          <p>
+            <pre>{{price|currency:"€"}}</pre>
+          </p>
+
+          <p>
+            <b>Syntax</b>: <code>{{value|filterName:argument1,argument2}}</code>
+          </p>
+
+          <p>
+            All arguments have come after filter name, and separated by coma. Expression must not include space or tabs symbols. Only
+            scalar types, strings and booleans are acceptable as filter arguments.
+          </p>
+        </p>
+
+        <h2>Embedded filters</h2>
+
+        <p>
+          <h3>template</h3>
+          <p>
+            Compile object or array to HTML template.
+          </p>
+          <p>
+            <b>Value type</b>: <code>Array|Object</code>;
+            <p>
+              <b>Arguments</b>
+              <ul>
+                <li>
+                  <b>String</b> <code>templateName</code> <i>required</i> - Template name;
+                </li>
+              </ul>
+            </p>
+          </p>
+        </p>
+
+        <p>
+          <h3>json</h3>
+          <p>
+            Stringify object to JSON expression.
+          </p>
+          <p>
+            <b>Value type</b>: <code>Object</code>;
+          </p>
+        </p>
+
+        <p>
+          <h3>capitalize</h3>
+          <p>
+            Capitalize string
+          </p>
+          <p>
+            <b>Value type</b>: <code>String</code>;
+          </p>
+        </p>
+
+        <p>
+          <h3>currency</h3>
+          <p>
+            Convert number to currency expresssion (ex. 2.5 =&gt; "$ 2.50").
+          </p>
+          <p>
+            <b>Value type</b>: <code>Number</code>;
+            <p>
+              <b>Arguments</b>
+              <ul>
+                <li>
+                  <b>String</b> <code>currencySymbol</code> <i>optional</i> - Currency symbol;
+                </li>
+              </ul>
+            </p>
+          </p>
+        </p>
+
+        <p>
+          <h3>string</h3>
+          <p>
+            Apply a method from <code>String</code> class to value.
+          </p>
+          <p>
+            <b>Value type</b>: <code>Any</code>, except <code>Object</code>;
+            <p>
+              <b>Arguments</b>
+              <ul>
+                <li>
+                  <b>String</b> <code>method</code> <i>required</i> - String method;
+                </li>
+              </ul>
+            </p>
+          </p>
+          <p>
+            <b>Note:</b> Filter can use more than one argument, according to called function.
+            <b>Example</b>:
+            <p>
+              <pre>
+              &lt;!-- display string length --&gt;
+              {{title|string:"length"}}
+
+              &lt;!-- substring first 15 chars --&gt;
+              {{text|string:"substring",0,15}}
+              </pre>
+            </p>
+          </p>
+        </p>
+
+        <p>
+          <h3>math</h3>
+          <p>
+            Call methods from <code>Math</code> JavaScript namespace.
+          </p>
+          <p>
+            <b>Value type</b>: <code>Number</code>
+            <p>
+              <b>Arguments</b>
+              <ul>
+                <li>
+                  <b>String</b> <code>method</code> <i>required</i> - method name;
+                </li>
+              </ul>
+            </p>
+          </p>
+          <p>
+            <b>Note:</b> Filter can use more than one argument, according to called function.
+          </p>
+        </p>
+
+
+        <p>
+          <h2>Custom filters</h2>
+          <p>
+            Filter is a regular pure function that receives current Karkas instance as `this` (context), value and
+            parameters and returns a new processed value.
+          </p>
+
+          <p>
+            <b>Example</b>:
+            <p>
+              <pre>
+karkas.addFilter('makeBold', function(value, params) {
+  console.log(this.filters); // Prints a list of Karkas filters
+  return `&lt;b&gt;${value}&lt;/b&gt;`;
+});</pre>
+            </p>
+          </p>
+        </p>
+        <br />
+        <br />
+
+      </div>
+    </div>
+</body>
+</html>

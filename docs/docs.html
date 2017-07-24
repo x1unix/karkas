@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>KarkasJS Example</title>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <base href="https://odin3.github.io/karkas/" />
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse navbar-default navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+          aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        <a class="navbar-brand" href="#">Karkas.js</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Demo</a></li>
+          <li class="active"><a href="docs.html">Get Started</a></li>
+          <li><a href="lazy-load.html">Lazy load</a></li>
+          <li><a href="filters.html">Filters</a></li>
+          <li><a href="https://github.com/odin3/karkas" target="_blank">Source</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Get Started</h1>
+    <article class="markdown-body entry-content" itemprop="text">
+      <h2><a id="user-content-tutorial" class="anchor" href="#tutorial" aria-hidden="true"></a>Tutorial</h2>
+      <h3><a id="user-content-1-html-and-js" class="anchor" href="#1-html-and-js" aria-hidden="true"></a>1. HTML and JS</h3>
+      <p>Create an HTML file, and include there <strong>karkas.js</strong> file.</p>
+      <h3><a id="user-content-2-create-an-template" class="anchor" href="#2-create-an-template" aria-hidden="true"></a>2. Create
+        an template</h3>
+      <p>To define a new template, create a new <strong>template</strong> tag. This block can be placed anywhere on page. Also
+        you have to give a name for template with <strong>name</strong> attribute, for example:</p>
+      <pre><code>&lt;script type="template/karkas" name="myFirstTemplate"&gt;
+&lt;/script&gt;
+</code></pre>
+      <p>Also you can insert template as string by JavaScript API:</p>
+      <pre><code>// Create template instance
+var template = karkas.createView('&lt;b&gt;Name:&lt;/b&gt; {{name}}', 'myTemplate');
+
+// Register template
+template.apply();
+</code></pre>
+      <p>Or use existing HTML element:</p>
+      <pre><code>var tpl = new karkas.createView(document.querySelector('.item'), 'myTemplate');
+</code></pre>
+      <h3><a id="user-content-3-add-content-and-variables" class="anchor" href="#3-add-content-and-variables" aria-hidden="true"></a>3.
+        Add content and variables</h3>
+      <p>Inside template, you can place a regular HTML markup and variables, placed in moustache. Variable name must be the
+        same as a key of array/object.</p>
+      <p>For example, this array:</p>
+      <pre><code>[
+	{
+		id: 0,
+		name: "Andrew",
+		lastname: "Johnson",
+		date: {
+			day:2,
+			month:"July",
+			year:2010
+		}
+	},
+	{
+		id: 1,
+		name: "Lorem",
+		lastname: "Lipsum",
+		date: {
+			day:1,
+			month:"January",
+			year:2014
+		}
+	}
+]
+
+</code></pre>
+      <p>Can be parsed with this template:</p>
+      <pre><code>&lt;script type="template/karkas" name="myTemplate"&gt;
+	&lt;a href="site.com/user{{id}}"&gt;{{name}} {{lastname}} ({{id}})&lt;/a&gt;
+	&lt;p&gt;{{date.day}} {{date.month}} {{date.year}}&lt;/p&gt;
+&lt;/script&gt;
+</code></pre>
+      <h3><a id="user-content-4-parsing-data" class="anchor" href="#4-parsing-data" aria-hidden="true"></a>4. Parsing data</h3>
+      <p>You can directly compile data using <strong>karkas.compile</strong>. It will return a compiled HTML as string, but
+        also it allows to output result directly to HTML elements. You can use it to parse an array of objects or a single
+        object.</p>
+      <p>Parse an array of objects directly to DIV:</p>
+      <pre><code>karkas.compile("myTemplate",arrayOfObjects,"#container",true);
+</code></pre>
+      <p>The last parameter, allows to you overwrite or append result to HTML tag.</p>
+      <p>Just parse a single object and return data to variable:</p>
+      <pre><code>var compiledHTML = karkas.compile("myTemplate",singleObject);
+</code></pre>
+      <p>Also you can store all templates in separate file (see <strong>Including remote templates</strong>).</p>
+      <h4><a id="user-content-unpacking-simple-arrays" class="anchor" href="#unpacking-simple-arrays" aria-hidden="true"></a>Unpacking
+        simple arrays</h4>
+      <p>To unpack a simple array of strings or numbers, you can use <code>this</code> variable in templates:</p>
+      <pre><code>&lt;script type="template/karkas" name="1"&gt;
+	&lt;a href="{{this}}"&gt;{{this}}&lt;/a&gt;
+&lt;/script&gt;
+</code></pre>
+      <p>Also you can use <code>this</code> as object instance inside your templates.</p>
+      <h3><a id="user-content-5-filters" class="anchor" href="#5-filters" aria-hidden="true"></a>5. Filters</h3>
+      <p>You can filter values inside template using filters. Karkas has several embedded filters:</p>
+      <ul>
+        <li><strong>currency</strong> - convert number to currency expresssion (ex. 2.5 =&gt; "$ 2.50").</li>
+        <li><strong>json</strong> - stringify object to JSON.</li>
+        <li><strong>capitalize</strong> - capitalize string.</li>
+        <li><strong>toLower</strong> - to lower case.</li>
+        <li><strong>toUpper</strong> - to upper case.</li>
+      </ul>
+      <p>Full list of filters and manual are available in <code>FILTERS.MD</code> file.</p>
+      <h4><a id="user-content-filters-usage" class="anchor" href="#filters-usage" aria-hidden="true"></a>Filters usage</h4>
+      <p>To use filter for expression, add vertical line filter after object field and filter name inside expression:</p>
+      <pre><code>&lt;script type="template/karkas" name="demo"&gt;
+    &lt;div class="item"&gt;
+        &lt;b&gt;{{name}}&lt;/b&gt;: &lt;span&gt;{{price|currency}}
+    &lt;/div&gt;
+&lt;/script&gt;
+</code></pre>
+      <p>Some filters can have additional arguments, for example - <code>currency</code> filter has currency symbol as optional
+        argument:</p>
+      <pre><code>&lt;script type="template/karkas" name="demo"&gt;
+    &lt;div class="item"&gt;
+        &lt;b&gt;{{name}}&lt;/b&gt;: &lt;span&gt;{{price|currency:"€"}}
+    &lt;/div&gt;
+&lt;/script&gt;
+</code></pre>
+      <p>All arguments have come after filter name, and separated by coma. Only scalar types, strings and booleans are acceptable
+        as filter arguments.</p>
+      <h4><a id="user-content-custom-filters" class="anchor" href="#custom-filters" aria-hidden="true"></a>Custom filters</h4>
+      <p>All filters are presented as functions and stored inside Karkas. To create a new filter, you can use <code>karkas.filters.add</code>        function.</p>
+      <p><strong>Example</strong></p>
+      <pre><code>karkas.filters.add("myFilter", function(value, argument1, argument2) {
+    // Check if first argument is defined
+        if(typeof argument1 == "undefined") console.log("there is no argument1");
+
+    // return filtered value
+        return value.toUpperCase();
+    });
+</code></pre>
+      <p>First argument of filter function it's a expression value. All additional arguments will be passed after it.</p>
+      <h3><a id="user-content-6-use-one-template-inside-another" class="anchor" href="#6-use-one-template-inside-another" aria-hidden="true"></a>6.
+        Use one template inside another</h3>
+      <p>Karkas allows to embed one template inside other. To do it, just use <code>template</code> filter:</p>
+      <pre><code>&lt;!-- image template --&gt;
+&lt;script type="template/karkas" name="image-template"&gt;
+    &lt;div class="img-responsive"&gt;
+        &lt;img src="{{image}}" alt="{{title}}" /&gt;
+    &lt;/div&gt;
+&lt;/script&gt;
+
+
+&lt;!-- here is post template, here we will use image-template inside it to parse image --&gt;
+&lt;script type="template/karkas" name="post"&gt;
+    &lt;article class="post"&gt;
+        &lt;section&gt;{{title}}&lt;/section&gt;
+
+        &lt;!-- use object instance to parse image inside --&gt;
+        {{this|template: "image-template"}}
+
+        &lt;p&gt;{{text}}&lt;/p&gt;
+        &lt;a href="{{link}}"&gt;Read&lt;/a&gt;
+    &lt;/article&gt;
+&lt;/script&gt;
+
+</code></pre>
+      <h3><a id="user-content-6-store-templates-in-separate-files" class="anchor" href="#6-store-templates-in-separate-files"
+          aria-hidden="true"></a>6. Store templates in separate files</h3>
+      <p>Karkas allows to you to save your templates in files, and include them on demand using AJAX. Example of including templates
+        is available in <strong>ajax-template-example.html</strong> file and require an HTTP server.</p>
+      <p>A simple example of including a template and parsing data using it:</p>
+      <p><strong>index.html (with Promise support):</strong></p>
+      <pre><code>karkas.include("template.html").then(function(){
+    karkas.compile("listTemplate",data,"#container",true);
+}).catch(function (err) {
+    console.error('Augh, there was an error!', err.statusText);
+});
+</code></pre>
+      <p><strong>index.html (Regular callback):</strong></p>
+      <pre><code>karkas.include("template.html", function(){
+    karkas.compile("listTemplate",data,"#container",true);
+});
+</code></pre>
+      <p><strong>template.html</strong></p>
+      <pre><code>&lt;script type="template/karkas" name="listTemplate"&gt;
+{{data}}
+&lt;/script&gt;
+
+&lt;!--this file can contain a multiple templates--&gt;
+&lt;script type="template/karkas" name="menuTemplate"&gt;
+{{data}}
+&lt;/script&gt;
+
+</code></pre>
+    </article>
+  </div>
+</body>
+
+</html>

@@ -8,4 +8,4 @@
  * @version 4.0.0
  * @author Denis Sedchenko
  */
-export declare function arrayFilter(value: Array<any>, operation: string, ...args: any[]): any;
+export declare function templateFilter(value: any, templateName: string): any;

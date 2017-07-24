@@ -18,6 +18,7 @@ var math_1 = require("./math");
 var string_1 = require("./string");
 var toLower_1 = require("./toLower");
 var toUpper_1 = require("./toUpper");
+var template_1 = require("./template");
 var array_2 = require("./array");
 exports.arrayFilter = array_2.arrayFilter;
 var capitalize_2 = require("./capitalize");
@@ -34,6 +35,8 @@ var toLower_2 = require("./toLower");
 exports.toLowerFilter = toLower_2.toLowerFilter;
 var toUpper_2 = require("./toUpper");
 exports.toUpperFilter = toUpper_2.toUpperFilter;
+var template_2 = require("./template");
+exports.templateFilter = template_2.templateFilter;
 /**
  * Inject default filters to current Karkas instance
  *
@@ -49,6 +52,7 @@ function injectDefaultFilters(karkasInstance) {
         .addFilter('json', json_1.jsonFilter)
         .addFilter('capitalize', capitalize_1.capitalizeFilter)
         .addFilter('toLower', toLower_1.toLowerFilter)
+        .addFilter('template', template_1.templateFilter)
         .addFilter('toUpper', toUpper_1.toUpperFilter);
 }
 exports.injectDefaultFilters = injectDefaultFilters;
