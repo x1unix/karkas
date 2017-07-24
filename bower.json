@@ -1,7 +1,7 @@
 {
   "name": "karkas",
   "version": "4.0.0",
-  "main": "karkas.js",
+  "main": "dist/index.js",
   "authors": [
     "Denis Sedchenko <denis0051@gmail.com>"
   ],
