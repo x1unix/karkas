@@ -19,6 +19,7 @@ import { mathFilter } from './math';
 import { stringFilter } from './string';
 import { toLowerFilter } from './toLower';
 import { toUpperFilter } from './toUpper';
+import { templateFilter } from './template';
 
 
 export { arrayFilter } from './array';
@@ -29,6 +30,7 @@ export { mathFilter } from './math';
 export { stringFilter } from './string';
 export { toLowerFilter } from './toLower';
 export { toUpperFilter } from './toUpper';
+export { templateFilter } from './template';
 
 
 /**
@@ -46,5 +48,6 @@ export function injectDefaultFilters(karkasInstance: Karkas) {
       .addFilter('json', jsonFilter)
       .addFilter('capitalize', capitalizeFilter)
       .addFilter('toLower', toLowerFilter)
+      .addFilter('template', templateFilter)
       .addFilter('toUpper', toUpperFilter);
 };

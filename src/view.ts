@@ -80,15 +80,15 @@ export class View {
             }
 
             // If value is undefined - replace it
-            if( !def(newVal) ) newVal = '';
+            if (!def(newVal) ) newVal = '';
 
 
             // Use filter or template if available in expression
-            if( def(filter)) {
-              newVal = this.handler[this.handler.views.has(filter) ? 'compile' : 'filter'](filter, newVal);
+            if (def(filter)) {
+              newVal = this.handler.filter(filter, newVal);
             }
 
-            sReturn = sReturn.replace(currentField,newVal);
+            sReturn = sReturn.replace(currentField, newVal);
           }
       }
 

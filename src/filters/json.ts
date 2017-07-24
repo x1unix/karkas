@@ -12,7 +12,7 @@
 export function jsonFilter(val: any) {
     try {
         return JSON.stringify(val);
-    } catch(ex) {
+    } catch (ex) {
         return val;
     }
 };

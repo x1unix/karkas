@@ -99,7 +99,7 @@
     try {
       // Find and call the filter with selected args
       const filter = this.filters.get(filterName);
-      return filter.apply(filter, value);
+      return filter.apply(this, value);
     } catch (ex) {
       throw new Error(`Karkas: failed to apply filter '${filterName}', reason: ${ex.message}`);
     }
