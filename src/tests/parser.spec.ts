@@ -38,13 +38,29 @@ describe('Karkas', () => {
   });
 
   it('should filter values throw filter', () => {
-    karkas.createView('pipeTest', '{{this|json}}');
+    karkas.createView('filterTest', '{{this|json}}');
 
     const OBJ = {foo: 'bar', a: [1, '2', 3]};
     const EXPECTED = JSON.stringify(OBJ);
-    const GOT = karkas.compile('pipeTest', OBJ);
+    const GOT = karkas.compile('filterTest', OBJ);
 
-    // TODO: Add multiple filters support
+    expect(GOT).toEqual(EXPECTED);
+  });
+
+  it('should support multiple filters pipeline', () => {
+
+    karkas.addFilter('parseFloat', function(value: any, parseAsStr: boolean) {
+      if (parseAsStr === true) {
+        return parseFloat(value);
+      }
+    });
+
+    karkas.createView('pipelineTest', '{{this|parseFloat:true|currency:"€"}}');
+
+    const OBJ = '314e-2';
+    const EXPECTED = karkas.getFilter('currency')(parseFloat(OBJ), '€');
+    const GOT = karkas.compile('pipelineTest', OBJ);
+
     expect(GOT).toEqual(EXPECTED);
   });
 });
