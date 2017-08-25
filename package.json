@@ -1,6 +1,6 @@
 {
   "name": "karkas",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Dependency-less handlebars-based template engine inspired by Angular.",
   "main": "dist/index.js",
   "directories": {
