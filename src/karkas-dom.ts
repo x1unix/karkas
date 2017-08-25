@@ -15,6 +15,7 @@ function nul(e: any) { return e === null }
 const COMPILED_ELEMENT_SELECTOR = '*[data-compile]',
       COMPILED_ELEMENT_DATA = 'data-compile',
       COMPILED_ELEMENT_TEMPLATE = 'data-view',
+      COMPILED_ELEMENT_HOOK = 'data-k-on-compile',
       VIEW_SCRIPT_MIME_TYPE = 'text/karkas';
 
 const DEF_ERR_CB = (e: any) => console.error(e);
@@ -41,14 +42,16 @@ export class KarkasDOM extends Karkas {
    */
   private compileElement(element: Element | HTMLElement) {
     let tempName = element.getAttribute(COMPILED_ELEMENT_TEMPLATE),
+        compHool = element.getAttribute(COMPILED_ELEMENT_HOOK),
         tempData = element.getAttribute(COMPILED_ELEMENT_DATA);
 
     let source = null;
 
     const noTemplateName = nul(tempName);
     const hasTemplateData = !nul(tempData);
+    const hasCompileHook = !nul(compHool);
 
-    if (hasTemplateData) {
+    if (hasTemplateData || (tempData.length === 0)) {
       try {
         source = JSON.parse(tempData);
       } catch(error) {
@@ -74,6 +77,15 @@ export class KarkasDOM extends Karkas {
     } else {
       // Otherwize, append HTML
       element.innerHTML += template.compile(source);
+    }
+
+    // Execute onCompile hook safely
+    if (hasCompileHook) {
+      try {
+        (new Function(compHool)).call(null, element);
+      } catch(ex) {
+        console.warn(`Karkas: Compile hook was executed with exception: ${ex}`);
+      }
     }
   }
 
