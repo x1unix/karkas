@@ -13,9 +13,9 @@ function def(e: any) { return typeof e !== 'undefined'; }
 function nul(e: any) { return e === null }
 
 const COMPILED_ELEMENT_SELECTOR = '*[data-compile]',
-  COMPILED_ELEMENT_DATA = 'data-compile',
-  COMPILED_ELEMENT_TEMPLATE = 'data-view',
-  VIEW_SCRIPT_MIME_TYPE = 'text/karkas';
+      COMPILED_ELEMENT_DATA = 'data-compile',
+      COMPILED_ELEMENT_TEMPLATE = 'data-view',
+      VIEW_SCRIPT_MIME_TYPE = 'text/karkas';
 
 const DEF_ERR_CB = (e: any) => console.error(e);
 
@@ -32,27 +32,58 @@ export class KarkasDOM extends Karkas {
 
   public onFind() { }
 
+  /**
+   * Process single DOM element
+   *
+   * @private
+   * @param {(Element | HTMLElement)} element
+   * @memberof KarkasDOM
+   */
   private compileElement(element: Element | HTMLElement) {
     let tempName = element.getAttribute(COMPILED_ELEMENT_TEMPLATE),
-      tempData = element.getAttribute(COMPILED_ELEMENT_DATA);
+        tempData = element.getAttribute(COMPILED_ELEMENT_DATA);
 
-    if (nul(tempName)) throw new ReferenceError(COMPILED_ELEMENT_TEMPLATE + ' is undefined');
-    if (nul(tempData)) throw new ReferenceError(COMPILED_ELEMENT_DATA + ' is undefined');
+    let source = null;
 
-    tempName = tempName.trim();
-    tempData = tempData.trim();
+    const noTemplateName = nul(tempName);
+    const hasTemplateData = !nul(tempData);
 
-    try {
-      tempData = JSON.parse(tempData);
-      element.innerHTML += this.compile(tempName, tempData);
-    } catch (ex) {
-      console.error('Karkas: failed to compile element', {
-        element: element,
-        error: ex
-      });
+    if (hasTemplateData) {
+      try {
+        source = JSON.parse(tempData);
+      } catch(error) {
+        console.error(`Karkas: Failed to parse source object from attribute: "${error}"`, {
+          element,
+          error,
+          data: tempData
+        });
+
+        source = null;
+      }
+    }
+
+    /**
+     * If template name is defined at 'data-view' attribute - try to find registered view.
+     * Otherwize, create a new instance on the fly with div content
+     */
+    const template = noTemplateName ? this.view(String(element.innerHTML)) : this.getView(String(tempName).trim());
+
+    if (noTemplateName) {
+      // If template name is not defined - replace inner HTML with the compiled one
+      element.innerHTML = template.compile(source);
+    } else {
+      // Otherwize, append HTML
+      element.innerHTML += template.compile(source);
     }
   }
 
+  /**
+   * Re-start DOM check
+   *
+   * @param {boolean} [refreshItems=true]
+   * @returns
+   * @memberof KarkasDOM
+   */
   public refresh(refreshItems: boolean = true) {
     // Views container
     if (refreshItems) this.dispose();
@@ -83,6 +114,15 @@ export class KarkasDOM extends Karkas {
     }
   };
 
+  /**
+   * Load template from external resource
+   *
+   * @param {string} url Resource URL
+   * @param {string} templateName Template name
+   * @param {Function} [successCallback=null] Callback function (if not defined, Promise will be returned)
+   * @returns {(Promise<string> | void)}
+   * @memberof KarkasDOM
+   */
   public include(url: string, templateName: string, successCallback: Function = null): Promise<string> | void {
     const self = this;
     function makeRequest(onSuccess: Function, onError: Function = DEF_ERR_CB) {
