@@ -9,6 +9,8 @@
 
 import { Karkas } from './karkas';
 
+import { isArray } from 'lodash';
+
 const SEARCH_PATTERN = /[\{\{](.*?)[\}\}]+/gim;
 
 const valueParserFactory = (expressionName: string): Function => {
@@ -67,11 +69,12 @@ export class View {
             const keys = currentField.replace('{{','').replace('}}','').trim().split('|');
 
             // Check for filters and expressions
-            const filter = (keys.length > 1) ? keys[keys.length - 1] : undefined;
+            // const filter = (keys.length > 1) ? keys[keys.length - 1] : undefined;
+            const filters = (keys.length > 1) ? keys.slice(1) : undefined;
             const key = keys[0];
 
             //  replace expression with object
-            let newVal;
+            let newVal = '';
 
             try {
                 newVal = this.parseExpression(fields, key);
@@ -84,8 +87,8 @@ export class View {
 
 
             // Use filter or template if available in expression
-            if (def(filter)) {
-              newVal = this.handler.filter(filter, newVal);
+            if (isArray(filters)) {
+              filters.forEach((filter) => newVal = this.handler.filter(filter, newVal));
             }
 
             sReturn = sReturn.replace(currentField, newVal);
