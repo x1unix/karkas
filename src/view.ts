@@ -3,11 +3,13 @@
  * Licensed by MIT license
  *
  * @package karkas
- * @version 4.0.0
+ * @version 4.1.0
  * @author Denis Sedchenko
  */
 
 import { Karkas } from './karkas';
+
+import { isArray } from 'lodash';
 
 const SEARCH_PATTERN = /[\{\{](.*?)[\}\}]+/gim;
 
@@ -29,7 +31,7 @@ export class View {
     return SEARCH_PATTERN;
   }
 
-  public constructor(private handler: Karkas, name: string, content: string = null) {
+  public constructor(private handler: Karkas, name: string = null, content: string = null) {
     if (typeof content !== 'string') {
       throw new ReferenceError('Karkas.View: Template content must be a string');
     }
@@ -47,6 +49,18 @@ export class View {
    */
   private parseExpression(object: any, expression: string) {
       return valueParserFactory(expression).apply(object);
+  }
+
+  /**
+   * Compile object using the template
+   * @param source Source
+   */
+  compile(source: any = null): string {
+    if (source instanceof Array) {
+      return this.parseArray(source);
+    } else {
+      return this.parse(source);
+    }
   }
 
 
@@ -67,11 +81,12 @@ export class View {
             const keys = currentField.replace('{{','').replace('}}','').trim().split('|');
 
             // Check for filters and expressions
-            const filter = (keys.length > 1) ? keys[keys.length - 1] : undefined;
+            // const filter = (keys.length > 1) ? keys[keys.length - 1] : undefined;
+            const filters = (keys.length > 1) ? keys.slice(1) : undefined;
             const key = keys[0];
 
             //  replace expression with object
-            let newVal;
+            let newVal = '';
 
             try {
                 newVal = this.parseExpression(fields, key);
@@ -84,8 +99,8 @@ export class View {
 
 
             // Use filter or template if available in expression
-            if (def(filter)) {
-              newVal = this.handler.filter(filter, newVal);
+            if (isArray(filters)) {
+              filters.forEach((filter) => newVal = this.handler.filter(filter, newVal));
             }
 
             sReturn = sReturn.replace(currentField, newVal);

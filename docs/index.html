@@ -22,6 +22,7 @@
             <li class="active"><a href="index.html">Demo</a></li>
             <li><a href="docs.html">Get Started</a></li>
             <li><a href="lazy-load.html">Lazy load</a></li>
+            <li><a href="attrs.html">HTML Attributes</a></li>
             <li><a href="filters.html">Filters</a></li>
             <li><a href="https://github.com/odin3/karkas" target="_blank">Source</a></li>
           </ul>
@@ -45,11 +46,9 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='text/karkas' name='calcDemo'>
-                            {{'Hello ' + 'World'}} <br />
+                    <code data-compile="null">
+                            {{'Hello ' + 'World'}}<br />
                             2+2 = {{2+2}}
-                    </script>
-                    <code id="calculationsResult" data-compile="{}" data-view="calcDemo">
                     </code>
                 </div>
             </div>
@@ -64,7 +63,7 @@
                 <div class="col-md-8">
                     <p class="subtitle">Code:</p>
                     <code>
-                        &lt;code data-compile='{"name":"Lorem","surname":"Ipsum"}' data-view="inlineCompilationDemo"&gt;
+                        &lt;code data-compile='{"name":"Lorem","surname":"Ipsum"}'&gt;
                         <br />
                         &lt;!-- empty --&gt;<br />
                         &lt;/code&gt;
@@ -72,14 +71,40 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='text/karkas' name='inlineCompilationDemo'>
+                    <code data-compile='{"name":"Lorem","surname":"Ipsum"}'>
                             {{name}} {{surname}}
-                    </script>
-                    <code data-compile='{"name":"Lorem","surname":"Ipsum"}' data-view="inlineCompilationDemo">
                     </code>
                 </div>
             </div>
         </div>
+
+        <div class="box-block">
+          <h1>
+              DOM Compilation Hooks
+              <small>You can specify JavaScript hook to handle element compilation.</small>
+          </h1>
+          <br />
+          <div class="row">
+              <div class="col-md-8">
+                  <p class="subtitle">Code:</p>
+                  <code>
+                      &lt;code data-compile='{"login":"Test User","email":"user@mail.com"}' data-k-on-compile="onDivCompile();"&gt;
+                      <br />
+                      &lt;b id="boo"&gt;&lt;b/&gt;<br />
+                      &lt;/code&gt;
+                  </code>
+              </div>
+              <div class="col-md-4">
+                  <p class="subtitle">Result:</p>
+                  <code data-compile='{"login":"Test User","email":"user@mail.com"}' data-k-on-compile="onDivCompile();">
+                          Login: {{login}}
+                          Mail: {{email}}
+                          <br /><br />
+                          <b id="boo"></b>
+                  </code>
+              </div>
+          </div>
+      </div>
 
         <div class="box-block">
             <h1>
@@ -98,12 +123,10 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='text/karkas' name='filtersDemo'>
+                    <code data-compile='{"price": 13800.183}'>
                             Price :{{price|currency:'&euro;'}} <br />
                             Original JSON: <br />
                             {{this|json}}
-                    </script>
-                    <code id="filtersResult">
                     </code>
                 </div>
             </div>
@@ -240,6 +263,9 @@
 
 
     <script type="text/javascript">
+    window.onDivCompile = function() {
+      document.getElementById('boo').innerHTML = 'Look works!';
+    }
     // Container with data
     var data = [
     	{
@@ -289,10 +315,6 @@
     // templateName, data (Array or Object), html element / string [optional], overwrite content [optional]
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('#container').innerHTML = karkas.compile("listTemplate",data);
-
-        // Demos
-//        document.querySelector('#calculationsResult').innerHTML = karkas.compile('calcDemo',{});
-        document.querySelector('#filtersResult').innerHTML = karkas.compile('filtersDemo',{price: 13800.183});
 
         // List Box Demo
         var listBoxes = [

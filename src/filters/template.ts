@@ -16,7 +16,6 @@ export function templateFilter(value: any, templateName: string) {
 
   try {
       const v = this.compile(templateName, value);
-      console.log(value, templateName, v);
       return v;
   } catch (ex) {
       throw new Error(`Failed to compile template '${templateName}' (${ex.message})`);

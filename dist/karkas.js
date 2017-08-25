@@ -4,7 +4,7 @@
  * Licensed by MIT license
  *
  * @package karkas
- * @version 4.0.0
+ * @version 4.1.0
  * @author Denis Sedchenko
  */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -108,20 +108,11 @@ var Karkas = (function () {
      */
     Karkas.prototype.compile = function (templateName, context) {
         if (context === void 0) { context = {}; }
-        // Output buffer
-        var template = this.getView(templateName);
-        var output = '';
-        if (context instanceof Array) {
-            output = template.parseArray(context);
-        }
-        else {
-            output = template.parse(context);
-        }
-        return output;
+        return this.getView(templateName).compile(context);
     };
     ;
     /**
-     * Create a new prepared view instance and injects it
+     * Create and inject new view
      *
      * @param {string} name
      * @param {string} template
@@ -129,9 +120,20 @@ var Karkas = (function () {
      * @memberof Karkas
      */
     Karkas.prototype.createView = function (name, template) {
-        var view = new view_1.View(this, name, template);
+        var view = this.view(template, name);
         this.views.set(name, view);
         return view;
+    };
+    /**
+     * Create new view instance
+     *
+     * @param {string} template Template content
+     * @returns {View} Created view
+     * @memberof Karkas
+     */
+    Karkas.prototype.view = function (template, name) {
+        if (name === void 0) { name = null; }
+        return new view_1.View(this, name, template);
     };
     /**
      * Add filter

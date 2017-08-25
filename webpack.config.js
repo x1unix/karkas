@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeEnv = process.env.NODE_ENV || "development";
 const isProd = nodeEnv === "production";
 
@@ -49,7 +50,17 @@ var config = {
           failOnHint: true
         }
       }
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: '../dist/karkas.min.js',
+        to: '../docs/karkas.min.js'
+      },
+      {
+        from: '../dist/karkas.min.js.map',
+        to: '../docs/karkas.min.js.map'
+      },
+    ])
   ]
 };
 
