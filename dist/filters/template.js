@@ -16,7 +16,6 @@ function templateFilter(value, templateName) {
     }
     try {
         var v = this.compile(templateName, value);
-        console.log(value, templateName, v);
         return v;
     }
     catch (ex) {

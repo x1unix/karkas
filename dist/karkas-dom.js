@@ -21,7 +21,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var karkas_1 = require("./karkas");
 function def(e) { return typeof e !== 'undefined'; }
 function nul(e) { return e === null; }
-var COMPILED_ELEMENT_SELECTOR = '*[data-compile]', COMPILED_ELEMENT_DATA = 'data-compile', COMPILED_ELEMENT_TEMPLATE = 'data-view', VIEW_SCRIPT_MIME_TYPE = 'text/karkas';
+var COMPILED_ELEMENT_SELECTOR = '*[data-compile]', COMPILED_ELEMENT_DATA = 'data-compile', COMPILED_ELEMENT_TEMPLATE = 'data-view', COMPILED_ELEMENT_HOOK = 'data-k-on-compile', VIEW_SCRIPT_MIME_TYPE = 'text/karkas';
 var DEF_ERR_CB = function (e) { return console.error(e); };
 var KarkasDOM = (function (_super) {
     __extends(KarkasDOM, _super);
@@ -35,25 +35,62 @@ var KarkasDOM = (function (_super) {
         return _this;
     }
     KarkasDOM.prototype.onFind = function () { };
+    /**
+     * Process single DOM element
+     *
+     * @private
+     * @param {(Element | HTMLElement)} element
+     * @memberof KarkasDOM
+     */
     KarkasDOM.prototype.compileElement = function (element) {
-        var tempName = element.getAttribute(COMPILED_ELEMENT_TEMPLATE), tempData = element.getAttribute(COMPILED_ELEMENT_DATA);
-        if (nul(tempName))
-            throw new ReferenceError(COMPILED_ELEMENT_TEMPLATE + ' is undefined');
-        if (nul(tempData))
-            throw new ReferenceError(COMPILED_ELEMENT_DATA + ' is undefined');
-        tempName = tempName.trim();
-        tempData = tempData.trim();
-        try {
-            tempData = JSON.parse(tempData);
-            element.innerHTML += this.compile(tempName, tempData);
+        var tempName = element.getAttribute(COMPILED_ELEMENT_TEMPLATE), compHool = element.getAttribute(COMPILED_ELEMENT_HOOK), tempData = element.getAttribute(COMPILED_ELEMENT_DATA);
+        var source = null;
+        var noTemplateName = nul(tempName);
+        var hasTemplateData = !nul(tempData);
+        var hasCompileHook = !nul(compHool);
+        if (hasTemplateData || (tempData.length === 0)) {
+            try {
+                source = JSON.parse(tempData);
+            }
+            catch (error) {
+                console.error("Karkas: Failed to parse source object from attribute: \"" + error + "\"", {
+                    element: element,
+                    error: error,
+                    data: tempData
+                });
+                source = null;
+            }
         }
-        catch (ex) {
-            console.error('Karkas: failed to compile element', {
-                element: element,
-                error: ex
-            });
+        /**
+         * If template name is defined at 'data-view' attribute - try to find registered view.
+         * Otherwize, create a new instance on the fly with div content
+         */
+        var template = noTemplateName ? this.view(String(element.innerHTML)) : this.getView(String(tempName).trim());
+        if (noTemplateName) {
+            // If template name is not defined - replace inner HTML with the compiled one
+            element.innerHTML = template.compile(source);
+        }
+        else {
+            // Otherwize, append HTML
+            element.innerHTML += template.compile(source);
+        }
+        // Execute onCompile hook safely
+        if (hasCompileHook) {
+            try {
+                (new Function(compHool)).call(null, element);
+            }
+            catch (ex) {
+                console.warn("Karkas: Compile hook was executed with exception: " + ex);
+            }
         }
     };
+    /**
+     * Re-start DOM check
+     *
+     * @param {boolean} [refreshItems=true]
+     * @returns
+     * @memberof KarkasDOM
+     */
     KarkasDOM.prototype.refresh = function (refreshItems) {
         if (refreshItems === void 0) { refreshItems = true; }
         // Views container
@@ -80,6 +117,15 @@ var KarkasDOM = (function (_super) {
         }
     };
     ;
+    /**
+     * Load template from external resource
+     *
+     * @param {string} url Resource URL
+     * @param {string} templateName Template name
+     * @param {Function} [successCallback=null] Callback function (if not defined, Promise will be returned)
+     * @returns {(Promise<string> | void)}
+     * @memberof KarkasDOM
+     */
     KarkasDOM.prototype.include = function (url, templateName, successCallback) {
         if (successCallback === void 0) { successCallback = null; }
         var self = this;

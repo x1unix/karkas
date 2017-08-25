@@ -3,7 +3,7 @@
  * Licensed by MIT license
  *
  * @package karkas
- * @version 4.0.0
+ * @version 4.1.0
  * @author Denis Sedchenko
  */
 import { View } from './view';
@@ -63,7 +63,7 @@ export declare class Karkas {
      */
     compile(templateName: string, context?: Array<any> | any): string;
     /**
-     * Create a new prepared view instance and injects it
+     * Create and inject new view
      *
      * @param {string} name
      * @param {string} template
@@ -71,6 +71,14 @@ export declare class Karkas {
      * @memberof Karkas
      */
     createView(name: string, template: string): View;
+    /**
+     * Create new view instance
+     *
+     * @param {string} template Template content
+     * @returns {View} Created view
+     * @memberof Karkas
+     */
+    view(template: string, name?: string): View;
     /**
      * Add filter
      *

@@ -4,10 +4,11 @@
  * Licensed by MIT license
  *
  * @package karkas
- * @version 4.0.0
+ * @version 4.1.0
  * @author Denis Sedchenko
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+var lodash_1 = require("lodash");
 var SEARCH_PATTERN = /[\{\{](.*?)[\}\}]+/gim;
 var valueParserFactory = function (expressionName) {
     return new Function("with(this) { return " + expressionName + "; }");
@@ -16,6 +17,7 @@ var t = function (v, t) { return typeof v === t; };
 var def = function (val) { return !t(val, 'undefined'); };
 var View = (function () {
     function View(handler, name, content) {
+        if (name === void 0) { name = null; }
         if (content === void 0) { content = null; }
         this.handler = handler;
         this.name = null;
@@ -43,37 +45,56 @@ var View = (function () {
         return valueParserFactory(expression).apply(object);
     };
     /**
+     * Compile object using the template
+     * @param source Source
+     */
+    View.prototype.compile = function (source) {
+        if (source === void 0) { source = null; }
+        if (source instanceof Array) {
+            return this.parseArray(source);
+        }
+        else {
+            return this.parse(source);
+        }
+    };
+    /**
      * Parse an single object using the template
      * @param fields Object
      * @returns {string} Compiled content
      */
     View.prototype.parse = function (fields) {
+        var _this = this;
         var sReturn = this.content.toString(), tpFields = sReturn.match(this.pattern);
-        for (var pat in tpFields) {
+        var _loop_1 = function (pat) {
             var currentField = tpFields[pat];
             if (t(currentField, 'string') || t(currentField, 'number')) {
                 // Remove brackets and extract filters
                 var keys = currentField.replace('{{', '').replace('}}', '').trim().split('|');
                 // Check for filters and expressions
-                var filter = (keys.length > 1) ? keys[keys.length - 1] : undefined;
+                // const filter = (keys.length > 1) ? keys[keys.length - 1] : undefined;
+                var filters = (keys.length > 1) ? keys.slice(1) : undefined;
                 var key = keys[0];
                 //  replace expression with object
-                var newVal = void 0;
+                var newVal_1 = '';
                 try {
-                    newVal = this.parseExpression(fields, key);
+                    newVal_1 = this_1.parseExpression(fields, key);
                 }
                 catch (ex) {
-                    throw new ReferenceError("Karkas: failed to parse expression '" + key + "' in template '" + this.name + "'. " + ex.message);
+                    throw new ReferenceError("Karkas: failed to parse expression '" + key + "' in template '" + this_1.name + "'. " + ex.message);
                 }
                 // If value is undefined - replace it
-                if (!def(newVal))
-                    newVal = '';
+                if (!def(newVal_1))
+                    newVal_1 = '';
                 // Use filter or template if available in expression
-                if (def(filter)) {
-                    newVal = this.handler.filter(filter, newVal);
+                if (lodash_1.isArray(filters)) {
+                    filters.forEach(function (filter) { return newVal_1 = _this.handler.filter(filter, newVal_1); });
                 }
-                sReturn = sReturn.replace(currentField, newVal);
+                sReturn = sReturn.replace(currentField, newVal_1);
             }
+        };
+        var this_1 = this;
+        for (var pat in tpFields) {
+            _loop_1(pat);
         }
         return sReturn;
     };
