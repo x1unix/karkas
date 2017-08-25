@@ -45,11 +45,9 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='text/karkas' name='calcDemo'>
-                            {{'Hello ' + 'World'}} <br />
+                    <code data-compile="null">
+                            {{'Hello ' + 'World'}}<br />
                             2+2 = {{2+2}}
-                    </script>
-                    <code id="calculationsResult" data-compile="{}" data-view="calcDemo">
                     </code>
                 </div>
             </div>
@@ -64,7 +62,7 @@
                 <div class="col-md-8">
                     <p class="subtitle">Code:</p>
                     <code>
-                        &lt;code data-compile='{"name":"Lorem","surname":"Ipsum"}' data-view="inlineCompilationDemo"&gt;
+                        &lt;code data-compile='{"name":"Lorem","surname":"Ipsum"}'&gt;
                         <br />
                         &lt;!-- empty --&gt;<br />
                         &lt;/code&gt;
@@ -72,10 +70,8 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='text/karkas' name='inlineCompilationDemo'>
+                    <code data-compile='{"name":"Lorem","surname":"Ipsum"}'>
                             {{name}} {{surname}}
-                    </script>
-                    <code data-compile='{"name":"Lorem","surname":"Ipsum"}' data-view="inlineCompilationDemo">
                     </code>
                 </div>
             </div>
@@ -98,12 +94,10 @@
                 </div>
                 <div class="col-md-4">
                     <p class="subtitle">Result:</p>
-                    <script type='text/karkas' name='filtersDemo'>
+                    <code data-compile='{"price": 13800.183}'>
                             Price :{{price|currency:'&euro;'}} <br />
                             Original JSON: <br />
                             {{this|json}}
-                    </script>
-                    <code id="filtersResult">
                     </code>
                 </div>
             </div>
@@ -289,10 +283,6 @@
     // templateName, data (Array or Object), html element / string [optional], overwrite content [optional]
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('#container').innerHTML = karkas.compile("listTemplate",data);
-
-        // Demos
-//        document.querySelector('#calculationsResult').innerHTML = karkas.compile('calcDemo',{});
-        document.querySelector('#filtersResult').innerHTML = karkas.compile('filtersDemo',{price: 13800.183});
 
         // List Box Demo
         var listBoxes = [
