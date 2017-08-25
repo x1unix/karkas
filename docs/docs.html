@@ -25,6 +25,7 @@
           <li><a href="index.html">Demo</a></li>
           <li class="active"><a href="docs.html">Get Started</a></li>
           <li><a href="lazy-load.html">Lazy load</a></li>
+          <li><a href="attrs.html">HTML Attributes</a></li>
           <li><a href="filters.html">Filters</a></li>
           <li><a href="https://github.com/odin3/karkas" target="_blank">Source</a></li>
         </ul>
@@ -35,26 +36,26 @@
   <div class="container">
     <h1>Get Started</h1>
     <article class="markdown-body entry-content" itemprop="text">
-      <h2><a id="user-content-tutorial" class="anchor" href="#tutorial" aria-hidden="true"></a>Tutorial</h2>
-      <h3><a id="user-content-1-html-and-js" class="anchor" href="#1-html-and-js" aria-hidden="true"></a>1. HTML and JS</h3>
-      <p>Create an HTML file, and include there <strong>karkas.js</strong> file.</p>
+      <h3><a id="user-content-1-html-and-js" class="anchor" href="#1-html-and-js" aria-hidden="true"></a>1. Import the library</h3>
+      <p>Import Karkas to your TypeScript / JavaScript file:</p>
+      <pre>import karkas from 'karkas';</pre>
+      <p>
+        <b>Note:</b> If you are not running code in Node.js and you don't have a module bundler - you can use minified precompiled version in <code>karkas.min.js</code> file.
+      </p>
+
       <h3><a id="user-content-2-create-an-template" class="anchor" href="#2-create-an-template" aria-hidden="true"></a>2. Create
         an template</h3>
-      <p>To define a new template, create a new <strong>template</strong> tag. This block can be placed anywhere on page. Also
-        you have to give a name for template with <strong>name</strong> attribute, for example:</p>
-      <pre><code>&lt;script type="template/karkas" name="myFirstTemplate"&gt;
-&lt;/script&gt;
-</code></pre>
-      <p>Also you can insert template as string by JavaScript API:</p>
-      <pre><code>// Create template instance
-var template = karkas.createView('&lt;b&gt;Name:&lt;/b&gt; {{name}}', 'myTemplate');
+      <p>Define a global template:</p>
+      <pre>// Create template instance
+karkas.createView('&lt;b&gt;Name:&lt;/b&gt; {{name}}', 'myTemplate');
 
-// Register template
-template.apply();
-</code></pre>
-      <p>Or use existing HTML element:</p>
-      <pre><code>var tpl = new karkas.createView(document.querySelector('.item'), 'myTemplate');
-</code></pre>
+// Get global template then:
+const template = karkas.getView('myTemplate');
+</pre>
+      <p>Or define a local template. It won't be injected into Karkas and can be compiled quickly.</p>
+      <pre>
+const compiledResult = karkas.view('Template body').compile(obj);
+      </pre>
       <h3><a id="user-content-3-add-content-and-variables" class="anchor" href="#3-add-content-and-variables" aria-hidden="true"></a>3.
         Add content and variables</h3>
       <p>Inside template, you can place a regular HTML markup and variables, placed in moustache. Variable name must be the
@@ -85,11 +86,10 @@ template.apply();
 
 </code></pre>
       <p>Can be parsed with this template:</p>
-      <pre><code>&lt;script type="template/karkas" name="myTemplate"&gt;
-	&lt;a href="site.com/user{{id}}"&gt;{{name}} {{lastname}} ({{id}})&lt;/a&gt;
-	&lt;p&gt;{{date.day}} {{date.month}} {{date.year}}&lt;/p&gt;
-&lt;/script&gt;
-</code></pre>
+      <pre>
+&lt;a href="site.com/user{{id}}"&gt;{{name}} {{lastname}} ({{id}})&lt;/a&gt;
+&lt;p&gt;{{date.day}} {{date.month}} {{date.year}}&lt;/p&gt;
+      </pre>
       <h3><a id="user-content-4-parsing-data" class="anchor" href="#4-parsing-data" aria-hidden="true"></a>4. Parsing data</h3>
       <p>You can directly compile data using <strong>karkas.compile</strong>. It will return a compiled HTML as string, but
         also it allows to output result directly to HTML elements. You can use it to parse an array of objects or a single
@@ -105,10 +105,7 @@ template.apply();
       <h4><a id="user-content-unpacking-simple-arrays" class="anchor" href="#unpacking-simple-arrays" aria-hidden="true"></a>Unpacking
         simple arrays</h4>
       <p>To unpack a simple array of strings or numbers, you can use <code>this</code> variable in templates:</p>
-      <pre><code>&lt;script type="template/karkas" name="1"&gt;
-	&lt;a href="{{this}}"&gt;{{this}}&lt;/a&gt;
-&lt;/script&gt;
-</code></pre>
+      <pre>&lt;a href="{{this}}"&gt;{{this}}&lt;/a&gt;</pre>
       <p>Also you can use <code>this</code> as object instance inside your templates.</p>
       <h3><a id="user-content-5-filters" class="anchor" href="#5-filters" aria-hidden="true"></a>5. Filters</h3>
       <p>You can filter values inside template using filters. Karkas has several embedded filters:</p>
@@ -122,26 +119,23 @@ template.apply();
       <p>Full list of filters and manual are available in <code>FILTERS.MD</code> file.</p>
       <h4><a id="user-content-filters-usage" class="anchor" href="#filters-usage" aria-hidden="true"></a>Filters usage</h4>
       <p>To use filter for expression, add vertical line filter after object field and filter name inside expression:</p>
-      <pre><code>&lt;script type="template/karkas" name="demo"&gt;
-    &lt;div class="item"&gt;
-        &lt;b&gt;{{name}}&lt;/b&gt;: &lt;span&gt;{{price|currency}}
-    &lt;/div&gt;
-&lt;/script&gt;
+      <pre><code>&lt;div class="item"&gt;
+    &lt;b&gt;{{name}}&lt;/b&gt;: &lt;span&gt;{{price|currency}}
+&lt;/div&gt;
 </code></pre>
       <p>Some filters can have additional arguments, for example - <code>currency</code> filter has currency symbol as optional
         argument:</p>
-      <pre><code>&lt;script type="template/karkas" name="demo"&gt;
-    &lt;div class="item"&gt;
-        &lt;b&gt;{{name}}&lt;/b&gt;: &lt;span&gt;{{price|currency:"€"}}
-    &lt;/div&gt;
-&lt;/script&gt;
+      <pre><code>
+&lt;div class="item"&gt;
+    &lt;b&gt;{{name}}&lt;/b&gt;: &lt;span&gt;{{price|currency:"€"}}
+&lt;/div&gt;
 </code></pre>
       <p>All arguments have come after filter name, and separated by coma. Only scalar types, strings and booleans are acceptable
         as filter arguments.</p>
       <h4><a id="user-content-custom-filters" class="anchor" href="#custom-filters" aria-hidden="true"></a>Custom filters</h4>
       <p>All filters are presented as functions and stored inside Karkas. To create a new filter, you can use <code>karkas.filters.add</code>        function.</p>
       <p><strong>Example</strong></p>
-      <pre><code>karkas.filters.add("myFilter", function(value, argument1, argument2) {
+      <pre><code>karkas.addFilter("myFilter", function(value, argument1, argument2) {
     // Check if first argument is defined
         if(typeof argument1 == "undefined") console.log("there is no argument1");
 
@@ -153,27 +147,16 @@ template.apply();
       <h3><a id="user-content-6-use-one-template-inside-another" class="anchor" href="#6-use-one-template-inside-another" aria-hidden="true"></a>6.
         Use one template inside another</h3>
       <p>Karkas allows to embed one template inside other. To do it, just use <code>template</code> filter:</p>
-      <pre><code>&lt;!-- image template --&gt;
-&lt;script type="template/karkas" name="image-template"&gt;
-    &lt;div class="img-responsive"&gt;
-        &lt;img src="{{image}}" alt="{{title}}" /&gt;
-    &lt;/div&gt;
-&lt;/script&gt;
+      <pre>
+&lt;article class="post"&gt;
+    &lt;section&gt;{{title}}&lt;/section&gt;
 
+    &lt;!-- use object instance to parse image inside --&gt;
+    {{this|template: "myNestedTemplate"}}
 
-&lt;!-- here is post template, here we will use image-template inside it to parse image --&gt;
-&lt;script type="template/karkas" name="post"&gt;
-    &lt;article class="post"&gt;
-        &lt;section&gt;{{title}}&lt;/section&gt;
-
-        &lt;!-- use object instance to parse image inside --&gt;
-        {{this|template: "image-template"}}
-
-        &lt;p&gt;{{text}}&lt;/p&gt;
-        &lt;a href="{{link}}"&gt;Read&lt;/a&gt;
-    &lt;/article&gt;
-&lt;/script&gt;
-
+    &lt;p&gt;{{text}}&lt;/p&gt;
+    &lt;a href="{{link}}"&gt;Read&lt;/a&gt;
+&lt;/article&gt;
 </code></pre>
       <h3><a id="user-content-6-store-templates-in-separate-files" class="anchor" href="#6-store-templates-in-separate-files"
           aria-hidden="true"></a>6. Store templates in separate files</h3>

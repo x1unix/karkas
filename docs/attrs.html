@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>KarkasJS Example</title>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <base href="https://odin3.github.io/karkas/" />
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse navbar-default navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+          aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        <a class="navbar-brand" href="#">Karkas.js</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Demo</a></li>
+          <li><a href="docs.html">Get Started</a></li>
+          <li><a href="lazy-load.html">Lazy load</a></li>
+          <li class="active"><a href="attrs.html">HTML Attributes</a></li>
+          <li><a href="filters.html">Filters</a></li>
+          <li><a href="https://github.com/odin3/karkas" target="_blank">Source</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Browser integration</h1>
+    <article class="markdown-body entry-content" itemprop="text">
+      Karkas by default can integrate with HTML DOM when detects browser environment.<br />
+
+      <div>
+          <h2>
+            Template declaration
+          </h2>
+          <p>
+            To declare a new template, create a new <code>script</code> element:<br />
+            <pre>
+&lt;script type="text/karkas" name="yourTemplateName"&gt;
+  // Template body
+&lt;/script&gt;
+            </pre>
+          </p>
+      </div>
+
+      <div>
+        <h2>
+            Compilation
+        </h2>
+        <p>
+          You can specify special tags on HTML element to make Karkas compile that element on page load.<br />
+        </p>
+        <b>Example:</b>
+        <pre>
+&lt;div data-compile='{"foo": "bar"}' data-view='MyView' data-k-on-compile='onElementCompile();'&gt;
+...
+&lt;/div&gt;
+        </pre>
+        <p>
+          <b>List of attributes:</b>
+          <ul>
+            <li><code>data-compile</code> - JSON to compile <b>(required)</b></li>
+            <li><code>data-view</code> - Template to use. If not defined - inner content of the element will be used as template. <i>(optional)</i></li>
+            <li><code>data-k-on-compile</code> - Hook to evaluate on template compile. Passes current element as first argument. <i>(optional)</i></li>
+          </ul>
+        </p>
+      </div>
+
+      <div>
+        <h2>Detect changes</h2>
+        <p>
+          By default, Karkas runs HTML scan after <code>DOMContentLoaded</code> event.<br/>
+          You can call <code>karkas.refresh()</code> to process new HTML elements.
+        </p>
+      </div>
+    </article>
+  </div>
+</body>
+
+</html>
