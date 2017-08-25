@@ -78,6 +78,34 @@
         </div>
 
         <div class="box-block">
+          <h1>
+              DOM Compilation Hooks
+              <small>You can specify JavaScript hook to handle element compilation.</small>
+          </h1>
+          <br />
+          <div class="row">
+              <div class="col-md-8">
+                  <p class="subtitle">Code:</p>
+                  <code>
+                      &lt;code data-compile='{"login":"Test User","email":"user@mail.com"}' data-k-on-compile="onDivCompile();"&gt;
+                      <br />
+                      &lt;b id="boo"&gt;&lt;b/&gt;<br />
+                      &lt;/code&gt;
+                  </code>
+              </div>
+              <div class="col-md-4">
+                  <p class="subtitle">Result:</p>
+                  <code data-compile='{"login":"Test User","email":"user@mail.com"}' data-k-on-compile="onDivCompile();">
+                          Login: {{login}}
+                          Mail: {{email}}
+                          <br /><br />
+                          <b id="boo"></b>
+                  </code>
+              </div>
+          </div>
+      </div>
+
+        <div class="box-block">
             <h1>
                 <p class="subtitle">Filters</p>
                 <small>You can pass values of object inside filters</small>
@@ -234,6 +262,9 @@
 
 
     <script type="text/javascript">
+    window.onDivCompile = function() {
+      document.getElementById('boo').innerHTML = 'Look works!';
+    }
     // Container with data
     var data = [
     	{
