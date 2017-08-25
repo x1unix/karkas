@@ -1,6 +1,6 @@
 # Karkas.js
 
-**Version: 4.0.0**
+**Version: 4.1.0**
 
 A powerfull template engine for JavaScript inspired by AngularJS.
 
@@ -9,7 +9,7 @@ Karkas allows to you to parse and filter JSON objects or arrays directly as HTML
 
 Demo and docs are available [here](https://odin3.github.io/karkas).
 
-**Attention!** This version isn't compatible with previous major versions of library. To get previous version, checkout `2.x` branch. 
+**Attention!** This version isn't compatible with previous major versions of library. To get previous version, checkout `2.x` branch.
 
 
 ## Compatibility
