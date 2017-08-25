@@ -20,29 +20,23 @@ describe('Karkas', () => {
   });
 
   it('should parse "this" as current object reference', () => {
-    karkas.createView('thisTest', 'Hello {{this}}!');
-
     const EXPECTED = 'Hello World!';
-    const GOT = karkas.compile('thisTest', 'World');
+    const GOT = karkas.view('Hello {{this}}!').compile('World');
 
     expect(GOT).toEqual(EXPECTED);
   });
 
   it('should parse JavaScript expressions inside template', () => {
-    karkas.createView('expTest', '2+2={{2 + 2}}');
-
     const EXPECTED = '2+2=4';
-    const GOT = karkas.compile('expTest', null);
+    const GOT = karkas.view('2+2={{2 + 2}}').compile(null);
 
     expect(GOT).toEqual(EXPECTED);
   });
 
   it('should filter values throw filter', () => {
-    karkas.createView('filterTest', '{{this|json}}');
-
     const OBJ = {foo: 'bar', a: [1, '2', 3]};
     const EXPECTED = JSON.stringify(OBJ);
-    const GOT = karkas.compile('filterTest', OBJ);
+    const GOT = karkas.view('{{this|json}}').compile(OBJ);
 
     expect(GOT).toEqual(EXPECTED);
   });
@@ -55,11 +49,9 @@ describe('Karkas', () => {
       }
     });
 
-    karkas.createView('pipelineTest', '{{this|parseFloat:true|currency:"€"}}');
-
     const OBJ = '314e-2';
     const EXPECTED = karkas.getFilter('currency')(parseFloat(OBJ), '€');
-    const GOT = karkas.compile('pipelineTest', OBJ);
+    const GOT = karkas.view('{{this|parseFloat:true|currency:"€"}}').compile(OBJ);
 
     expect(GOT).toEqual(EXPECTED);
   });

@@ -3,7 +3,7 @@
  * Licensed by MIT license
  *
  * @package karkas
- * @version 4.0.0
+ * @version 4.1.0
  * @author Denis Sedchenko
  */
 
@@ -31,7 +31,7 @@ export class View {
     return SEARCH_PATTERN;
   }
 
-  public constructor(private handler: Karkas, name: string, content: string = null) {
+  public constructor(private handler: Karkas, name: string = null, content: string = null) {
     if (typeof content !== 'string') {
       throw new ReferenceError('Karkas.View: Template content must be a string');
     }
@@ -49,6 +49,18 @@ export class View {
    */
   private parseExpression(object: any, expression: string) {
       return valueParserFactory(expression).apply(object);
+  }
+
+  /**
+   * Compile object using the template
+   * @param source Source
+   */
+  compile(source: any = null): string {
+    if (source instanceof Array) {
+      return this.parseArray(source);
+    } else {
+      return this.parse(source);
+    }
   }
 
 

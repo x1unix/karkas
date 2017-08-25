@@ -3,7 +3,7 @@
  * Licensed by MIT license
  *
  * @package karkas
- * @version 4.0.0
+ * @version 4.1.0
  * @author Denis Sedchenko
  */
 
@@ -114,23 +114,12 @@
    * @memberof Karkas
    */
   public compile(templateName: string, context: Array<any> | any = {}): string {
-    // Output buffer
-    const template = this.getView(templateName);
-
-    let output = '';
-
-    if (context instanceof Array) {
-      output = template.parseArray(context);
-    } else {
-      output = template.parse(context);
-    }
-
-    return output;
+    return this.getView(templateName).compile(context);
   };
 
 
   /**
-   * Create a new prepared view instance and injects it
+   * Create and inject new view
    *
    * @param {string} name
    * @param {string} template
@@ -138,7 +127,7 @@
    * @memberof Karkas
    */
   public createView(name: string, template: string): View {
-    const view = new View(this, name, template);
+    const view = this.view(template, name);
 
     this.views.set(
       name,
@@ -146,6 +135,17 @@
     );
 
     return view;
+  }
+
+  /**
+   * Create new view instance
+   *
+   * @param {string} template Template content
+   * @returns {View} Created view
+   * @memberof Karkas
+   */
+  public view(template: string, name: string = null): View {
+    return new View(this, name, template);
   }
 
   /**
